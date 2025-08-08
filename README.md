@@ -123,36 +123,129 @@ CREATE DATABASE IF NOT EXISTS cardapio_db;
 USE cardapio_db;
 
 -- Tabela de Usuários (Gerência e Desenvolvedor)
-CREATE TABLE IF NOT EXISTS usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    usuario VARCHAR(100) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
-    nivel_acesso ENUM('geral', 'pedidos', 'dono') NOT NULL,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE usuarios (
+  id INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  senha VARCHAR(255) NOT NULL,
+  nivel_acesso ENUM('geral','pedidos','dono') DEFAULT NULL,
+  criado_em TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  usuario VARCHAR(100) DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY email (email)
 );
 
 -- Tabela de Mesas
-CREATE TABLE IF NOT EXISTS mesas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome_usuario VARCHAR(255) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE mesas (
+  id INT NOT NULL AUTO_INCREMENT,
+  nome_usuario VARCHAR(255) NOT NULL,
+  senha VARCHAR(255) NOT NULL,
+  criado_em TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY nome_usuario (nome_usuario)
 );
 
 -- Tabela de Sessões de Cliente
-CREATE TABLE IF NOT EXISTS sessoes_cliente (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_mesa INT NOT NULL,
-    nome_cliente VARCHAR(255) NOT NULL,
-    status ENUM('ativa', 'finalizada', 'cancelada') DEFAULT 'ativa',
-    forma_pagamento VARCHAR(50) NULL,
-    data_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_fim TIMESTAMP NULL,
-    finalizado_por_id INT NULL,
-    FOREIGN KEY (id_mesa) REFERENCES mesas(id) ON DELETE CASCADE,
-    FOREIGN KEY (finalizado_por_id) REFERENCES usuarios(id) ON DELETE SET NULL
+CREATE TABLE sessoes_cliente (
+  id INT NOT NULL AUTO_INCREMENT,
+  id_mesa INT NOT NULL,
+  nome_cliente VARCHAR(255) NOT NULL,
+  telefone_cliente VARCHAR(20) DEFAULT NULL,
+  cpf_cliente VARCHAR(14) DEFAULT NULL,
+  status ENUM('ativa','finalizada','cancelada') DEFAULT 'ativa',
+  data_inicio TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  data_fim TIMESTAMP NULL DEFAULT NULL,
+  forma_pagamento VARCHAR(50) DEFAULT NULL,
+  finalizado_por_id INT DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY id_mesa (id_mesa),
+  KEY fk_finalizado_por (finalizado_por_id),
+  CONSTRAINT fk_finalizado_por FOREIGN KEY (finalizado_por_id) REFERENCES usuarios (id) ON DELETE SET NULL,
+  CONSTRAINT sessoes_cliente_ibfk_1 FOREIGN KEY (id_mesa) REFERENCES mesas (id) ON DELETE CASCADE
+);
+
+-- Tabela de Categorias
+CREATE TABLE categorias (
+  id INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  criado_em TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  ordem INT NOT NULL DEFAULT '0',
+  ativo TINYINT(1) NOT NULL DEFAULT '1',
+  is_happy_hour TINYINT(1) NOT NULL DEFAULT '0',
+  happy_hour_inicio TIME DEFAULT NULL,
+  happy_hour_fim TIME DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY nome (nome)
+);
+
+-- Tabela de Produtos
+CREATE TABLE produtos (
+  id INT NOT NULL AUTO_INCREMENT,
+  id_categoria INT NOT NULL,
+  nome VARCHAR(255) NOT NULL,
+  descricao TEXT NOT NULL,
+  descricao_detalhada TEXT,
+  preco DECIMAL(10,2) NOT NULL,
+  imagem_svg LONGTEXT,
+  criado_em TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  serve_pessoas INT DEFAULT '1',
+  ativo TINYINT(1) NOT NULL DEFAULT '1',
+  pode_ser_sugestao TINYINT(1) NOT NULL DEFAULT '0',
+  ordem INT DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY id_categoria (id_categoria),
+  CONSTRAINT produtos_ibfk_1 FOREIGN KEY (id_categoria) REFERENCES categorias (id) ON DELETE CASCADE
+);
+
+-- Tabela de Pedidos
+CREATE TABLE pedidos (
+  id INT NOT NULL AUTO_INCREMENT,
+  id_sessao INT NOT NULL,
+  id_produto INT NOT NULL,
+  quantidade INT NOT NULL DEFAULT '1',
+  preco_unitario DECIMAL(10,2) NOT NULL,
+  observacoes TEXT,
+  data_pedido TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  status VARCHAR(50) NOT NULL DEFAULT 'pendente',
+  motivo_cancelamento TEXT,
+  observacao TEXT,
+  PRIMARY KEY (id),
+  KEY id_sessao (id_sessao),
+  KEY id_produto (id_produto),
+  CONSTRAINT pedidos_ibfk_1 FOREIGN KEY (id_sessao) REFERENCES sessoes_cliente (id) ON DELETE CASCADE,
+  CONSTRAINT pedidos_ibfk_2 FOREIGN KEY (id_produto) REFERENCES produtos (id) ON DELETE CASCADE
+);
+
+-- Tabela de Chamados de Garçom
+CREATE TABLE chamados (
+  id INT NOT NULL AUTO_INCREMENT,
+  id_mesa INT NOT NULL,
+  nome_mesa VARCHAR(255) NOT NULL,
+  data_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status ENUM('pendente','atendido') NOT NULL DEFAULT 'pendente',
+  PRIMARY KEY (id),
+  KEY id_mesa (id_mesa),
+  CONSTRAINT chamados_ibfk_1 FOREIGN KEY (id_mesa) REFERENCES mesas (id) ON DELETE CASCADE
+);
+
+-- Tabela de Logs do Sistema
+CREATE TABLE logs (
+  id INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT DEFAULT NULL,
+  nome_usuario VARCHAR(255) DEFAULT NULL,
+  acao VARCHAR(255) NOT NULL,
+  detalhes TEXT,
+  data_hora TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY id_usuario (id_usuario)
+);
+
+-- Tabela de Configurações
+CREATE TABLE configuracoes (
+  chave VARCHAR(50) NOT NULL,
+  valor TEXT NOT NULL,
+  ultima_modificacao TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (chave)
 );
 
 -- Inserção do usuário DONO (senha: 'admin')
