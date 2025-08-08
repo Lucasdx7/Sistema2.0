@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login da Mesa - Sistema de Pedidos</title>
+    
+    <!-- Estilos originais -->
+    <link rel="stylesheet" href="/Usuario.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <!-- **NOVO**: Estilo para o teclado virtual -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+
+    <!-- Adicionando Font Awesome para ícones (usado no seu JS original ) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>SKINA 67</h1>
+                <p>• COZINHA E BAR •</p>
+            </div>
+            <div class="welcome-message">
+                <h2>Bem-vindo!</h2>
+                <p>Por favor, identifique a sua mesa para iniciar o pedido.</p>
+            </div>
+        </aside>
+
+        <main class="main-content login-main">
+            <div class="login-form-container">
+                <h2>Identificação da Mesa</h2>
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="usuario">Usuário da Mesa</label>
+                        <!-- **ALTERADO**: Adicionado 'readonly' para desativar o teclado padrão -->
+                        <input type="text" id="usuario" name="usuario" placeholder="Ex: Mesa01" required readonly>
+                    </div>
+                    <div class="input-group">
+                        <label for="senha">Senha de Acesso</label>
+                        <!-- **ALTERADO**: Adicionado 'readonly' para desativar o teclado padrão -->
+                        <input type="password" id="senha" name="senha" required readonly>
+                    </div>
+                    <button type="submit" class="login-button">Entrar no Cardápio</button>
+                    <p id="error-message" class="error-message"></p>
+                </form>
+            </div>
+
+            <!-- **NOVO**: Contêiner onde o teclado virtual será renderizado -->
+            <div class="simple-keyboard"></div>
+        </main>
+    </div>
+
+    <!-- Scripts de bibliotecas -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <!-- **NOVO**: Script da biblioteca do teclado virtual -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
+
+    <!-- Seus scripts de lógica -->
+    <script src="/notificacao.js"></script>
+    <script src="/login_cliente.js"></script> <!-- Este arquivo precisará ser atualizado conforme a resposta anterior -->
+    <script src="/cliente-comum.js"></script>
+</body>
+</html>

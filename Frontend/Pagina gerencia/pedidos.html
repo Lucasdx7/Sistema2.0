@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Acompanhamento de Pedidos - Skina 67</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Link para o CSS da gerencia que você já usa -->
+    <link rel="stylesheet" href="/adm.css">
+    <!-- Link para o CSS específico desta página -->
+    <link rel="stylesheet" href="/pedidos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Cabeçalho Padrão -->
+        <header class="dashboard-header">
+            <div class="header-title">
+                <a href="/gerencia-home" class="back-button" title="Voltar ao Painel">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1>Acompanhamento de Pedidos</h1>
+            </div>
+            <div class="profile-menu">
+                <button id="profile-menu-btn" class="profile-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown hidden">
+                    <div class="dropdown-header">
+                        <strong id="dropdown-user-name"></strong>
+                        <span id="dropdown-user-role"></span>
+                    </div>
+                    <a href="#" id="logout-btn" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Conteúdo Principal -->
+        <main id="pedidos-container" class="pedidos-container">
+            <!-- Os cards de pedidos serão inseridos aqui dinamicamente -->
+            <div id="mensagem-sem-sessoes" class="mensagem-sem-sessoes hidden">
+                <i class="fas fa-tablet-alt"></i>
+                <p>Nenhuma mesa ativa no momento.</p>
+                <span>Aguardando o primeiro cliente do dia...</span>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <!-- Script de notificações que você já usa -->
+    <script src="/notificacoes.js"></script>
+    <!-- Script principal desta página -->
+    <script src="/pedidos.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Pedido - Skina 67</title>
+    <link rel="stylesheet" href="/Usuario.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <!-- O container principal agora engloba tudo -->
+    <div class="container-full">
+        <!-- Cabeçalho fixo -->
+        <header class="sheader">
+            <!-- Bloco da Logo -->
+            <div class="sheader-logo">
+                <h1>SKINA 67</h1>
+                <p>• COZINHA E BAR •</p>
+            </div>
+
+            <!-- Bloco dos Ícones -->
+            <div class="sheader-icons">
+                <i class="fas fa-user icon" id="profile-icon" title="Minha Conta"></i>
+                <i class="fas fa-info-circle icon" id="about-icon" title="Sobre"></i>
+                <div class="cart-icon icon" id="cart-icon" title="Meu Pedido">
+                    <i class="fas fa-scroll"></i>
+                    <span class="badge">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Conteúdo principal da página de confirmação -->
+        <main class="confirmation-page">
+            <!-- Coluna Esquerda: Itens do Pedido -->
+            <section class="order-column">
+                <div class="panel">
+                    <h2 class="panel-title"><i class="fas fa-clipboard-list"></i> Resumo do seu Pedido</h2>
+                    <ul id="lista-resumo-pedido" class="order-item-list">
+                        <!-- Itens do carrinho serão inseridos aqui pelo JS -->
+                        <p>Carregando itens...</p>
+                    </ul>
+                    <div class="subtotal-summary">
+                        <span>Subtotal</span>
+                        <span id="subtotal-valor">R$ 0,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Coluna Direita: Ações e Sugestões -->
+            <aside class="actions-column">
+                <!-- Card de Sugestões -->
+                <div class="panel suggestion-panel">
+                    <h3 class="panel-title-light"><i class="fas fa-lightbulb"></i> Que tal um acompanhamento?</h3>
+                    <div id="suggestion-item" class="suggestion-item-card">
+                        <!-- Item de sugestão será carregado aqui -->
+                        <p>Carregando sugestão...</p>
+                    </div>
+                </div>
+
+                <!-- Card de Confirmação Final -->
+                <div class="panel confirmation-panel">
+                    <div class="final-total">
+                        <span class="total-label">VALOR TOTAL</span>
+                        <span id="total-valor" class="total-price">R$ 0,00</span>
+                    </div>
+                    <div class="confirmation-buttons">
+                        <button id="confirmar-pedido-btn" class="btn btn-success">
+                            <i class="fas fa-check"></i> Confirmar e Enviar
+                        </button>
+                        <button id="voltar-cardapio-btn" class="btn btn-danger">
+                            <i class="fas fa-arrow-left"></i> Voltar e Editar
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- --- MODAL DE OBSERVAÇÃO (COM CAMPO PREPARADO ) --- -->
+    <!-- ================================================== -->
+    <div id="observation-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 id="modal-title">Adicionar Observação</h3>
+            <p id="modal-product-name">Nome do Produto Aqui</p>
+            <!-- O textarea agora está preparado para o teclado virtual -->
+            <textarea id="modal-textarea" placeholder="Toque para digitar..." readonly class="virtual-input"></textarea>
+            <div class="modal-actions">
+                <button id="modal-cancel-btn" class="btn btn-secondary">Cancelar</button>
+                <button id="modal-save-btn" class="btn btn-success">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- --- ESTRUTURA DO TECLADO VIRTUAL ALFANUMÉRICO --- -->
+    <!-- ================================================== -->
+    <div id="virtual-keyboard-alphanumeric" class="virtual-keyboard-container hidden">
+        <div class="keyboard-header">
+            <span id="keyboard-target-label">Adicionar Observação</span>
+            <button type="button" class="keyboard-close-btn">&times;</button>
+        </div>
+        <div class="keyboard-keys">
+            <!-- Fila de Números -->
+            <button type="button" class="keyboard-key" data-key="1">1</button>
+            <button type="button" class="keyboard-key" data-key="2">2</button>
+            <button type="button" class="keyboard-key" data-key="3">3</button>
+            <button type="button" class="keyboard-key" data-key="4">4</button>
+            <button type="button" class="keyboard-key" data-key="5">5</button>
+            <button type="button" class="keyboard-key" data-key="6">6</button>
+            <button type="button" class="keyboard-key" data-key="7">7</button>
+            <button type="button" class="keyboard-key" data-key="8">8</button>
+            <button type="button" class="keyboard-key" data-key="9">9</button>
+            <button type="button" class="keyboard-key" data-key="0">0</button>
+            <!-- Fila QWERTY -->
+            <button type="button" class="keyboard-key" data-key="q">q</button>
+            <button type="button" class="keyboard-key" data-key="w">w</button>
+            <button type="button" class="keyboard-key" data-key="e">e</button>
+            <button type="button" class="keyboard-key" data-key="r">r</button>
+            <button type="button" class="keyboard-key" data-key="t">t</button>
+            <button type="button" class="keyboard-key" data-key="y">y</button>
+            <button type="button" class="keyboard-key" data-key="u">u</button>
+            <button type="button" class="keyboard-key" data-key="i">i</button>
+            <button type="button" class="keyboard-key" data-key="o">o</button>
+            <button type="button" class="keyboard-key" data-key="p">p</button>
+            <!-- Fila ASDFGH -->
+            <button type="button" class="keyboard-key" data-key="a">a</button>
+            <button type="button" class="keyboard-key" data-key="s">s</button>
+            <button type="button" class="keyboard-key" data-key="d">d</button>
+            <button type="button" class="keyboard-key" data-key="f">f</button>
+            <button type="button" class="keyboard-key" data-key="g">g</button>
+            <button type="button" class="keyboard-key" data-key="h">h</button>
+            <button type="button" class="keyboard-key" data-key="j">j</button>
+            <button type="button" class="keyboard-key" data-key="k">k</button>
+            <button type="button" class="keyboard-key" data-key="l">l</button>
+            <button type="button" class="keyboard-key" data-key="ç">ç</button>
+            <!-- Fila ZCVBNM e Teclas Especiais -->
+            <button type="button" class="keyboard-key key-special" id="shift-key">⇧</button>
+            <button type="button" class="keyboard-key" data-key="z">z</button>
+            <button type="button" class="keyboard-key" data-key="x">x</button>
+            <button type="button" class="keyboard-key" data-key="c">c</button>
+            <button type="button" class="keyboard-key" data-key="v">v</button>
+            <button type="button" class="keyboard-key" data-key="b">b</button>
+            <button type="button" class="keyboard-key" data-key="n">n</button>
+            <button type="button" class="keyboard-key" data-key="m">m</button>
+            <button type="button" class="keyboard-key key-special" id="backspace-key">⌫</button>
+            <!-- Teclas de Ação -->
+            <button type="button" class="keyboard-key key-space" data-key=" ">Espaço</button>
+            <button type="button" class="keyboard-key key-special" id="confirm-key">OK</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/notificacao.js"></script>
+    <script src="/confirmar_pedido.js"></script>
+    <script src="/cliente-comum.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Cardápio</title>
+    <link rel="stylesheet" href="/adm.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <a href="/gerencia-home" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="header-title">
+                <h1>Gerenciar Categoria/produtos</h1>
+                
+            </div>
+            <div class="profile-menu">
+                <button id="profile-menu-btn" class="profile-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown hidden">
+                    <div class="dropdown-header">
+                        <strong id="dropdown-user-name">Nome do Usuário</strong>
+                        <span id="dropdown-user-role">Nível de Acesso</span>
+                    </div>
+                    <a href="#" id="logout-btn" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-grid">
+            <!-- Seção de Categorias -->
+            <section class="panel" id="categorias-panel">
+                <h2>Categorias</h2>
+                <div class="form-container" id="form-categoria-container">
+                    <h3>Adicionar Nova Categoria</h3>
+                    <input type="text" id="input-nova-categoria" placeholder="Nome da nova categoria">
+                    
+                    <div class="happy-hour-toggle">
+                        <input type="checkbox" id="input-is-happy-hour">
+                        <label for="input-is-happy-hour">É Happy Hour?</label>
+                    </div>
+
+                    <div id="happy-hour-fields" class="hidden">
+                        <label for="input-happy-hour-inicio">Início:</label>
+                        <input type="time" id="input-happy-hour-inicio">
+                        <label for="input-happy-hour-fim">Fim:</label>
+                        <input type="time" id="input-happy-hour-fim">
+                    </div>
+
+                    <button id="btn-add-categoria">Adicionar Categoria</button>
+                </div>
+                <ul id="lista-categorias" class="item-list">
+                    <!-- As categorias serão carregadas aqui pelo JavaScript -->
+                </ul>
+            </section>
+
+            <!-- Seção de Produtos -->
+            <section class="panel" id="produtos-panel">
+                <h2>Produtos da Categoria: <span id="nome-categoria-selecionada">Nenhuma</span></h2>
+                
+                <!-- ================================================================== -->
+                <!-- --- FORMULÁRIO DE PRODUTO ATUALIZADO --- -->
+                <!-- ================================================================== -->
+                <div id="form-produto-container" class="hidden">
+                    <h3>Adicionar Novo Produto</h3>
+                    <input type="text" id="input-nome-produto" placeholder="Nome do produto" required>
+                    <textarea id="input-descricao-produto" placeholder="Descrição curta (para o cardápio )" required></textarea>
+                    
+                    <!-- NOVO CAMPO ADICIONADO AQUI -->
+                    <textarea id="input-descricao-detalhada" placeholder="Descrição detalhada (para o modal do cliente)"></textarea>
+                    
+                    <input type="number" id="input-preco-produto" placeholder="Preço (ex: 25.50)" required>
+                    <input type="number" id="input-serve-pessoas" placeholder="Serve quantas pessoas? (ex: 2)" min="1">
+                    <label for="input-imagem-produto">Imagem (SVG, PNG, JPG):</label>
+                    <input type="file" id="input-imagem-produto" accept="image/*">
+                    <button id="btn-add-produto">Salvar Produto</button>
+                </div>
+                <!-- ================================================================== -->
+
+                <ul id="lista-produtos" class="item-list">
+                    <!-- Os produtos serão carregados aqui pelo JavaScript -->
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Genérico para Edição -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modalTitle">Editar Item</h2>
+            <form id="editForm">
+                <input type="hidden" id="editItemId">
+                <input type="hidden" id="editItemType">
+                <div id="modalBody"></div>
+                <div class="modal-footer">
+                    <button type="submit" class="save-btn">Salvar Alterações</button>
+                    <button type="button" class="cancel-btn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    
+    <script src="/notificacoes.js"></script>
+
+    <script src="/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurações - Skina 67</title>
+    <!-- CSS e Ícones (mesmos do Gerencia-Home.html) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/adm.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Adiciona links para fontes do Google que serão usadas na personalização -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Montserrat&family=Nunito&family=Open+Sans&family=Poppins&family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Cabeçalho Superior (idêntico ao Gerencia-Home.html ) -->
+        <header class="dashboard-header">
+            <a href="/gerencia-home" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="header-title">
+                <h1>Configuração</h1>
+                
+            </div>
+            <div class="profile-menu">
+                <button id="profile-menu-btn" class="profile-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown hidden">
+                    <div class="dropdown-header">
+                        <strong id="dropdown-user-name">Nome do Usuário</strong>
+                        <span id="dropdown-user-role">Nível de Acesso</span>
+                    </div>
+                    <a href="#" id="logout-btn" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Grid com os Cards de Configuração -->
+        <main class="config-grid">
+
+            <!-- Card 1: Personalização da Aparência -->
+            <!-- Card 1: Personalização da Aparência -->
+                <div class="config-card">
+                    <div class="config-card-header">
+                        <i class="fas fa-paint-brush"></i>
+                        <h2>Aparência (Cliente)</h2>
+                    </div>
+                    <div class="config-card-body">
+                        <p>Selecione a fonte para as páginas do cliente (cardápio, conta, etc.).</p>
+                        <div class="form-group">
+                            <label for="fonte-cliente-select">Fonte Principal:</label>
+                            <select id="fonte-cliente-select" class="form-control">
+                                <option value="'Roboto', sans-serif">Roboto (Padrão)</option>
+                                <option value="'Open Sans', sans-serif">Open Sans</option>
+                                <option value="'Lato', sans-serif">Lato</option>
+                                <option value="'Montserrat', sans-serif">Montserrat</option>
+                                <option value="'Poppins', sans-serif">Poppins</option>
+                                <option value="'Nunito', sans-serif">Nunito</option>
+                                <option value="'Nunito', sans-serif">Instrument Serif</option>
+                            </select>
+                        </div>
+                        <!-- BOTÃO ADICIONADO AQUI -->
+                        <button id="salvar-fonte-btn" class="btn btn-primary full-width" style="margin-top: 1rem;">Salvar Aparência</button>
+                    </div>
+                </div>
+
+
+            <!-- Card 2: Relatório de Atividade -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <i class="fas fa-chart-pie"></i>
+                    <h2>Relatório de Atividade</h2>
+                </div>
+                <div class="config-card-body">
+                    <p>Analise o desempenho da equipe com base nas ações registradas.</p>
+                    <div class="form-group-inline">
+                        <select id="relatorio-usuario-select" class="form-control" title="Selecionar Funcionário">
+                            <!-- Opções carregadas via JS -->
+                        </select>
+                        <select id="relatorio-periodo-select" class="form-control" title="Selecionar Período">
+                            <option value="hoje">Hoje</option>
+                            <option value="semana">Esta Semana</option>
+                            <option value="mes">Este Mês</option>
+                            <option value="ano">Este Ano</option>
+                        </select>
+                    </div>
+                    <button id="gerar-relatorio-btn" class="btn btn-primary full-width">Gerar Relatório</button>
+                    <div id="relatorio-resultado-container" class="hidden">
+                        <!-- Resultados do relatório -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Permissões da Tela Inicial -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <i class="fas fa-user-shield"></i>
+                    <h2>Permissões de Acesso</h2>
+                </div>
+                <div class="config-card-body">
+                    <p>Controle os módulos que o nível "Pedidos" pode ver na tela inicial.</p>
+                    <form id="permissoes-form">
+                        <div class="permissions-grid">
+                            <!-- Checkboxes carregados via JS -->
+                        </div>
+                        <button type="submit" class="btn btn-success full-width">Salvar Permissões</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Card 4: Zona de Perigo -->
+           
+
+        </main>
+    </div>
+
+    <!-- Scripts (mesmos do Gerencia-Home.html, com a adição do novo script) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/notificacoes.js"></script>
+    <script src="/configuracoes.js"></script> <!-- Novo script para esta página -->
+</body>
+</html>

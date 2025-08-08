@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Chamados de Garçom - Skina 67</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/adm.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-title">
+                <a href="/gerencia-home" class="back-button" title="Voltar ao Painel">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1>Chamados de Garçom</h1>
+                <!-- BOTÃO ADICIONADO -->
+                <button id="limpar-chamados-btn" class="btn-limpar-tudo" title="Limpar todos os chamados atendidos">
+                    <i class="fas fa-trash-alt"></i> Limpar Atendidos
+                </button>
+            </div>
+            <div class="profile-menu">
+                <button id="profile-menu-btn" class="profile-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown hidden">
+                    <div class="dropdown-header">
+                        <strong id="dropdown-user-name"></strong>
+                        <span id="dropdown-user-role"></span>
+                    </div>
+                    <a href="#" id="logout-btn" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="chamados-container">
+            <div id="chamados-grid" class="chamados-grid">
+                <!-- Cards de chamados serão inseridos aqui pelo JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/notificacoes.js"></script>
+    <script src="/chamados.js"></script>
+</body>
+</html>

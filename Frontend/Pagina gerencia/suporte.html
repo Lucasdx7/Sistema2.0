@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Suporte Técnico - Skina 67</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Usando o mesmo CSS do painel de administração -->
+    <link rel="stylesheet" href="/adm.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Cabeçalho Padrão (Permanece o mesmo ) -->
+        <header class="dashboard-header">
+            <div class="header-title">
+                <a href="/gerencia-home" class="back-button" title="Voltar ao Painel">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1><i class="fas fa-life-ring"></i> Suporte Técnico</h1>
+            </div>
+            <div class="profile-menu">
+                <button id="profile-menu-btn" class="profile-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown hidden">
+                    <div class="dropdown-header">
+                        <strong id="dropdown-user-name"></strong>
+                        <span id="dropdown-user-role"></span>
+                    </div>
+                    <a href="#" id="logout-btn" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Conteúdo Principal com NOVAS classes -->
+        <main class="suporte-main-content">
+            <p class="suporte-description">
+                Preencha o formulário abaixo para abrir um chamado. Nossa equipe responderá o mais breve possível.
+            </p>
+            
+            <form id="form-suporte" class="suporte-form">
+                <div class="suporte-form-group">
+                    <label for="nome"><i class="fas fa-user"></i> Seu Nome</label>
+                    <input type="text" id="nome" name="nome" class="suporte-input" required>
+                </div>
+                
+                <div class="suporte-form-group">
+                    <label for="telefone"><i class="fab fa-whatsapp"></i> Telefone para Contato</label>
+                    <input type="tel" id="telefone" name="telefone" class="suporte-input" placeholder="(XX) XXXXX-XXXX" required>
+                </div>
+                
+                <div class="suporte-form-group">
+                    <label for="problema"><i class="fas fa-exclamation-circle"></i> Descreva o Problema</label>
+                    <textarea id="problema" name="problema" rows="8" class="suporte-textarea" required></textarea>
+                </div>
+                
+                <div class="suporte-form-actions">
+                    <button type="submit" class="suporte-btn-submit">
+                        <i class="fas fa-paper-plane"></i> Enviar Chamado
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/notificacoes.js"></script>
+    <!-- O JavaScript da página de suporte -->
+    <script src="/suporte.js"></script>
+</body>
+</html>

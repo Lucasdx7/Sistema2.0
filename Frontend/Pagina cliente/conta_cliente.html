@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Minha Conta - Skina 67</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/Usuario.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <!-- Botão escondido para o funcionário abrir o modal de logout -->
+    <button id="hidden-logout-button" class="hidden-button" title="Encerrar Sessão"></button>
+
+    <div class="dashboard-container">
+        <!-- ================================================== -->
+        <!-- HEADER REVERTIDO PARA O ESTILO ORIGINAL -->
+        <!-- ================================================== -->
+        <header class="main-header">
+            <a href="/cardapio" class="back-button" title="Voltar ao Cardápio">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Minha Conta</h1>
+        </header>
+
+        <main class="account-main">
+            <div class="panel account-details">
+                <h2>Detalhes do Cliente</h2>
+                <p><strong>Nome:</strong> <span id="cliente-nome">Carregando...</span></p>
+                <p><strong>Mesa:</strong> <span id="cliente-mesa">Carregando...</span></p>
+            </div>
+
+            <div class="panel order-list">
+                <h2>Meus Pedidos</h2>
+                <ul id="lista-pedidos" class="item-list">
+                    <!-- Pedidos serão inseridos aqui pelo JavaScript -->
+                </ul>
+            </div>
+
+            <div class="panel account-summary">
+                <h2>Resumo da Conta</h2>
+                <div class="summary-item">
+                    <span>Subtotal</span>
+                    <span id="subtotal-valor">R$ 0,00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Taxa de Serviço (10%  )</span>
+                    <span id="taxa-servico">R$ 0,00</span>
+                </div>
+                <hr>
+                <div class="summary-item total">
+                    <span>TOTAL</span>
+                    <span id="total-valor">R$ 0,00</span>
+                </div>
+                <button class="call-waiter-btn"><i class="fas fa-bell"></i> Chamar Garçom</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Logout da Mesa -->
+    <div id="logout-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="close-modal-btn" class="close-button">&times;</button>
+            <h2>Encerrar Sessão da Mesa</h2>
+            <p>Para liberar a mesa, confirme os dados e a forma de pagamento.</p>
+            <form id="logout-form">
+                <!-- ================================================== -->
+                <!-- CAMPOS COM A CORREÇÃO DO TECLADO DUPLO MANTIDA -->
+                <!-- ================================================== -->
+                <div class="form-group">
+                    <label for="funcionario-usuario">Nome de Usuário do Funcionário</label>
+                    <input type="text" id="funcionario-usuario" class="virtual-input" required autocomplete="off" placeholder="Toque para digitar..." readonly>
+                </div>
+                <div class="form-group">
+                    <label for="funcionario-senha">Senha do Funcionário</label>
+                    <input type="password" id="funcionario-senha" class="virtual-input" required autocomplete="off" placeholder="Toque para digitar..." readonly>
+                </div>
+
+                <!-- Seção de Pagamento (sem alterações) -->
+                <div class="form-group">
+                    <label>Forma de Pagamento</label>
+                    <div class="payment-options">
+                        <button type="button" class="payment-btn" data-payment="dinheiro">
+                            <i class="fas fa-money-bill-wave"></i> Dinheiro
+                        </button>
+                        <button type="button" class="payment-btn" data-payment="cartao">
+                            <i class="fas fa-credit-card"></i> Cartão
+                        </button>
+                        <button type="button" class="payment-btn" data-payment="pix">
+                            <i class="fas fa-qrcode"></i> PIX
+                        </button>
+                    </div>
+                    <input type="hidden" id="forma-pagamento-input" required>
+                </div>
+                <button type="submit" class="auth-submit-btn">Autorizar e Encerrar Conta</button>
+                <p id="logout-message" class="message"></p>
+            </form>
+        </div>
+    </div>
+
+     <div id="virtual-keyboard-alphanumeric" class="virtual-keyboard-container hidden">
+        <div class="keyboard-header">
+            <span id="keyboard-target-label"></span>
+            <button type="button" class="keyboard-close-btn">&times;</button>
+        </div>
+        <div class="keyboard-keys">
+            <!-- Fila de Números -->
+            <button type="button" class="keyboard-key" data-key="1">1</button>
+            <button type="button" class="keyboard-key" data-key="2">2</button>
+            <button type="button" class="keyboard-key" data-key="3">3</button>
+            <button type="button" class="keyboard-key" data-key="4">4</button>
+            <button type="button" class="keyboard-key" data-key="5">5</button>
+            <button type="button" class="keyboard-key" data-key="6">6</button>
+            <button type="button" class="keyboard-key" data-key="7">7</button>
+            <button type="button" class="keyboard-key" data-key="8">8</button>
+            <button type="button" class="keyboard-key" data-key="9">9</button>
+            <button type="button" class="keyboard-key" data-key="0">0</button>
+            <!-- Fila QWERTY -->
+            <button type="button" class="keyboard-key" data-key="q">q</button>
+            <button type="button" class="keyboard-key" data-key="w">w</button>
+            <button type="button" class="keyboard-key" data-key="e">e</button>
+            <button type="button" class="keyboard-key" data-key="r">r</button>
+            <button type="button" class="keyboard-key" data-key="t">t</button>
+            <button type="button" class="keyboard-key" data-key="y">y</button>
+            <button type="button" class="keyboard-key" data-key="u">u</button>
+            <button type="button" class="keyboard-key" data-key="i">i</button>
+            <button type="button" class="keyboard-key" data-key="o">o</button>
+            <button type="button" class="keyboard-key" data-key="p">p</button>
+            <!-- Fila ASDFGH -->
+            <button type="button" class="keyboard-key" data-key="a">a</button>
+            <button type="button" class="keyboard-key" data-key="s">s</button>
+            <button type="button" class="keyboard-key" data-key="d">d</button>
+            <button type="button" class="keyboard-key" data-key="f">f</button>
+            <button type="button" class="keyboard-key" data-key="g">g</button>
+            <button type="button" class="keyboard-key" data-key="h">h</button>
+            <button type="button" class="keyboard-key" data-key="j">j</button>
+            <button type="button" class="keyboard-key" data-key="k">k</button>
+            <button type="button" class="keyboard-key" data-key="l">l</button>
+            <button type="button" class="keyboard-key" data-key="ç">ç</button>
+            <!-- Fila ZCVBNM e Teclas Especiais -->
+            <button type="button" class="keyboard-key key-special" id="shift-key">⇧</button>
+            <button type="button" class="keyboard-key" data-key="z">z</button>
+            <button type="button" class="keyboard-key" data-key="x">x</button>
+            <button type="button" class="keyboard-key" data-key="c">c</button>
+            <button type="button" class="keyboard-key" data-key="v">v</button>
+            <button type="button" class="keyboard-key" data-key="b">b</button>
+            <button type="button" class="keyboard-key" data-key="n">n</button>
+            <button type="button" class="keyboard-key" data-key="m">m</button>
+            <button type="button" class="keyboard-key key-special" id="backspace-key">⌫</button>
+            <!-- Teclas de Ação -->
+            <button type="button" class="keyboard-key key-space" data-key=" ">Espaço</button>
+            <button type="button" class="keyboard-key key-special" id="confirm-key">OK</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/notificacao.js"></script>
+    <script src="/conta_cliente.js"></script>
+    <script src="/cliente-comum.js"></script>
+</body>
+</html>

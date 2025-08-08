@@ -1,0 +1,228 @@
+/* ==================================================================
+ * CSS DA PÁGINA DE ACOMPANHAMENTO DE PEDIDOS (VERSÃO PROFISSIONAL)
+ * ================================================================== */
+
+/* --- Estilos do Container Principal --- */
+.pedidos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px; /* Espaçamento entre os cards */
+    padding: 24px;
+    background-color: #f8f9fa; /* Um fundo levemente acinzentado */
+}
+
+/* --- Estilo Base do Card de Pedido --- */
+.pedido-card {
+    background-color: #ffffff;
+    border-radius: 12px; /* Bordas mais arredondadas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra mais suave */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Garante que os cantos arredondados sejam aplicados a tudo */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid #e9ecef; /* Borda sutil */
+}
+
+.pedido-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+
+/* --- Cabeçalho do Card --- */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background-color: #f1f3f5; /* Fundo do cabeçalho para destaque */
+    border-bottom: 1px solid #dee2e6;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.25rem; /* Tamanho maior para o nome da mesa */
+    color: #212529;
+}
+
+.card-header .cliente-nome {
+    font-size: 0.9rem;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+/* --- Tags de Status --- */
+.status-tag {
+    padding: 6px 12px;
+    border-radius: 20px; /* Formato de pílula */
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-tag.pedido_feito { background-color: #007bff; } /* Azul para indicar ação necessária */
+.status-tag.todos_entregues { background-color: #28a745; } /* Verde para sucesso */
+.status-tag.aguardando { background-color: #6c757d; } /* Cinza para estado neutro */
+
+/* --- Corpo do Card (Lista de Itens) --- */
+.card-body {
+    padding: 0; /* Removemos o padding para a lista ocupar todo o espaço */
+    flex-grow: 1;
+}
+
+.lista-itens {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lista-itens li {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e9ecef;
+    display: grid;
+    grid-template-columns: 1fr auto; /* Colunas para nome e ações */
+    grid-template-areas:
+        "info     actions"
+        "categoria actions"
+        "obs      actions";
+    gap: 4px 16px;
+}
+
+.lista-itens li:last-child {
+    border-bottom: none;
+}
+
+.item-info {
+    grid-area: info;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.item-quantidade {
+    font-size: 0.9rem;
+    padding: 2px 8px;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    color: #495057;
+}
+
+.item-categoria {
+    grid-area: categoria;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.item-observacao {
+    grid-area: obs;
+    font-size: 0.85rem;
+    color: #e67700; /* Cor de destaque para observações */
+    background-color: #fff9e6;
+    padding: 6px 8px;
+    border-radius: 4px;
+    margin-top: 4px;
+}
+
+/* --- Ações do Item (Botão) --- */
+.item-actions {
+    grid-area: actions;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-entregar {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-entregar:hover:not(:disabled) {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+.btn-entregar:disabled {
+    background-color: #28a745; /* Verde quando entregue */
+    color: white;
+    cursor: not-allowed;
+    opacity: 1; /* Garantir que a cor fique forte */
+}
+
+.btn-entregar:disabled .fa-check-circle {
+    animation: check-pop 0.4s ease-out;
+}
+
+@keyframes check-pop {
+    0% { transform: scale(0.8); }
+    80% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* --- Rodapé do Card --- */
+.card-footer {
+    padding: 16px 20px;
+    background-color: #343a40; /* Rodapé escuro para contraste */
+    color: #fff;
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* --- Estilo para Card com Chamado de Garçom --- */
+.pedido-card.chamando {
+    border-color: #ffc107; /* Borda amarela chamativa */
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.7);
+    animation: pulse-chamado 1.5s infinite;
+}
+
+@keyframes pulse-chamado {
+    0% { box-shadow: 0 0 15px rgba(255, 193, 7, 0.7); }
+    50% { box-shadow: 0 0 25px rgba(255, 193, 7, 1); }
+    100% { box-shadow: 0 0 15px rgba(255, 193, 7, 0.7); }
+}
+
+/* --- Mensagem de "Sem Pedidos" --- */
+.mensagem-sem-sessoes {
+    /* Este estilo já parece bom no seu CSS original, mantendo a consistência */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #6c757d;
+    padding: 40px;
+    width: 100%;
+    grid-column: 1 / -1; /* Ocupa toda a largura do grid */
+}
+
+.mensagem-sem-sessoes i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.mensagem-sem-sessoes p {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.mensagem-sem-sessoes span {
+    font-size: 1rem;
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identificação do Cliente - Skina 67</title>
+    <!-- SEU ARQUIVO CSS -->
+    <link rel="stylesheet" href="/Usuario.css">
+    <!-- SweetAlert (se estiver usando) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>SKINA 67</h1>
+                <p>• COZINHA E BAR •</p>
+            </div>
+            <div class="welcome-message">
+                <h2 id="welcome-mesa-name">Bem-vindo!</h2>
+                <p>Só mais um passo antes de acessar o cardápio.</p>
+            </div>
+        </aside>
+
+        <main class="main-content login-main">
+            <div class="login-form-container">
+                <h2>Identifique-se para o Pedido</h2>
+                <p class="subtitle">Preencha seus dados para continuar.</p>
+                <form id="dados-cliente-form">
+                    <div class="input-group">
+                        <label for="nome">Seu Nome (Obrigatório )</label>
+                        <!-- MODIFICADO: Adicionado readonly e a classe 'alpha-input' -->
+                        <input type="text" id="nome" name="nome" placeholder="Toque para digitar seu nome" required readonly class="alpha-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="telefone">Telefone (Opcional)</label>
+                        <!-- MODIFICADO: Adicionado readonly e a classe 'numeric-input' -->
+                        <input type="tel" id="telefone" name="telefone" placeholder="Toque para digitar seu telefone" readonly class="numeric-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="cpf">CPF na nota? (Opcional)</label>
+                        <!-- MODIFICADO: Adicionado readonly e a classe 'numeric-input' -->
+                        <input type="text" id="cpf" name="cpf" placeholder="Toque para digitar seu CPF" readonly class="numeric-input">
+                    </div>
+                    <button type="submit" class="login-button">Ver o Cardápio</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- =================================
+         ESTRUTURA DOS TECLADOS VIRTUAIS
+         (Eles ficam escondidos até serem chamados pelo JS)
+         ================================= -->
+
+    <!-- Teclado Numérico -->
+    <div id="virtual-keyboard" class="virtual-keyboard-container hidden">
+        <div class="keyboard-header">
+            <span id="keyboard-target-label"></span>
+            <button type="button" class="keyboard-close-btn">&times;</button>
+        </div>
+        <div class="keyboard-keys">
+            <button type="button" class="keyboard-key" data-key="1">1</button>
+            <button type="button" class="keyboard-key" data-key="2">2</button>
+            <button type="button" class="keyboard-key" data-key="3">3</button>
+            <button type="button" class="keyboard-key" data-key="4">4</button>
+            <button type="button" class="keyboard-key" data-key="5">5</button>
+            <button type="button" class="keyboard-key" data-key="6">6</button>
+            <button type="button" class="keyboard-key" data-key="7">7</button>
+            <button type="button" class="keyboard-key" data-key="8">8</button>
+            <button type="button" class="keyboard-key" data-key="9">9</button>
+            <button type="button" class="keyboard-key key-special" id="keyboard-backspace">⌫</button>
+            <button type="button" class="keyboard-key" data-key="0">0</button>
+            <button type="button" class="keyboard-key key-special" id="keyboard-confirm">OK</button>
+        </div>
+    </div>
+
+    <!-- Teclado Alfabético (QWERTY) -->
+    <div id="virtual-keyboard-alpha" class="virtual-keyboard-container hidden">
+        <div class="keyboard-header">
+            <span id="keyboard-alpha-target-label"></span>
+            <button type="button" class="keyboard-close-btn">&times;</button>
+        </div>
+        <div class="keyboard-keys">
+            <button type="button" class="keyboard-key" data-key="q">q</button>
+            <button type="button" class="keyboard-key" data-key="w">w</button>
+            <button type="button" class="keyboard-key" data-key="e">e</button>
+            <button type="button" class="keyboard-key" data-key="r">r</button>
+            <button type="button" class="keyboard-key" data-key="t">t</button>
+            <button type="button" class="keyboard-key" data-key="y">y</button>
+            <button type="button" class="keyboard-key" data-key="u">u</button>
+            <button type="button" class="keyboard-key" data-key="i">i</button>
+            <button type="button" class="keyboard-key" data-key="o">o</button>
+            <button type="button" class="keyboard-key" data-key="p">p</button>
+            <button type="button" class="keyboard-key" data-key="a">a</button>
+            <button type="button" class="keyboard-key" data-key="s">s</button>
+            <button type="button" class="keyboard-key" data-key="d">d</button>
+            <button type="button" class="keyboard-key" data-key="f">f</button>
+            <button type="button" class="keyboard-key" data-key="g">g</button>
+            <button type="button" class="keyboard-key" data-key="h">h</button>
+            <button type="button" class="keyboard-key" data-key="j">j</button>
+            <button type="button" class="keyboard-key" data-key="k">k</button>
+            <button type="button" class="keyboard-key" data-key="l">l</button>
+            <button type="button" class="keyboard-key" data-key="ç">ç</button>
+            <button type="button" class="keyboard-key key-special" id="shift-key">⇧</button>
+            <button type="button" class="keyboard-key" data-key="z">z</button>
+            <button type="button" class="keyboard-key" data-key="x">x</button>
+            <button type="button" class="keyboard-key" data-key="c">c</button>
+            <button type="button" class="keyboard-key" data-key="v">v</button>
+            <button type="button" class="keyboard-key" data-key="b">b</button>
+            <button type="button" class="keyboard-key" data-key="n">n</button>
+            <button type="button" class="keyboard-key" data-key="m">m</button>
+            <button type="button" class="keyboard-key key-special" id="backspace-alpha">⌫</button>
+            <button type="button" class="keyboard-key key-space" data-key=" ">Espaço</button>
+            <button type="button" class="keyboard-key key-special" id="confirm-alpha">OK</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <!-- SEUS SCRIPTS ORIGINAIS -->
+    <script src="/notificacao.js"></script>
+    <script src="/dados_cliente.js"></script>
+    <script src="/cliente-comum.js"></script>
+</body>
+</html>

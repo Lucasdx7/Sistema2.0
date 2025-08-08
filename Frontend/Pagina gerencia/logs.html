@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Logs do Sistema - Skina 67</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/adm.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+    <div class="header-title">
+        <a href="/gerencia-home" class="back-button" title="Voltar ao Painel">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1>Logs de Atividade do Sistema</h1>
+    </div>
+    <div class="profile-menu">
+        <button id="profile-menu-btn" class="profile-menu-button">
+            <i class="fas fa-user-circle"></i>
+        </button>
+        <div id="profile-dropdown" class="profile-dropdown hidden">
+            <div class="dropdown-header">
+                <strong id="dropdown-user-name"></strong>
+                <span id="dropdown-user-role"></span>
+            </div>
+            <a href="#" id="logout-btn" class="dropdown-item">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </a>
+        </div>
+    </div>
+</header>
+
+
+                    <main class="logs-container">
+                <!-- ================================================== -->
+                <!-- --- NOVO CABEÇALHO DE FILTROS --- -->
+                <!-- ================================================== -->
+                <div class="logs-filter-header">
+                    <div class="filter-group">
+                        <label for="filtro-data"><i class="fas fa-calendar-alt"></i> Filtrar por Data:</label>
+                        <input type="date" id="filtro-data" class="form-control">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filtro-termo"><i class="fas fa-search"></i> Buscar nos Detalhes:</label>
+                        <input type="text" id="filtro-termo" class="form-control" placeholder="Ex: Mesa 05, Produto X...">
+                    </div>
+                    <div class="filter-actions">
+                        <button id="btn-aplicar-filtros" class="btn btn-primary"><i class="fas fa-filter"></i> Aplicar</button>
+                        <button id="btn-limpar-filtros" class="btn btn-secondary"><i class="fas fa-undo"></i> Limpar</button>
+                    </div>
+                </div>
+
+                <!-- Tabela de Logs (sem alterações na estrutura) -->
+                <table id="logs-table">
+                    <thead>
+                        <tr>
+                            <th>Data e Hora</th>
+                            <th>Usuário</th>
+                            <th>Ação</th>
+                            <th>Detalhes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- As linhas de log serão inseridas aqui pelo JavaScript -->
+                    </tbody>
+                </table>
+            </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    
+    <script src="/notificacoes.js"></script>
+
+    <script src="/logs.js"></script>
+</body>
+</html>

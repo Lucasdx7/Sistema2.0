@@ -1,0 +1,102 @@
+<!-- /Frontend/Pagina_dev/dev.html -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Desenvolvedor</title>
+    <!-- O caminho para o CSS deve ser relativo à pasta raiz do frontend -->
+    <link rel="stylesheet" href="/dev.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+     <!-- ================================================== -->
+    <!-- === LINHA A SER ADICIONADA PARA CORRIGIR OS ÍCONES === -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- ================================================== -->
+</head>
+<body>
+    <header>
+        <h1>Painel do Desenvolvedor</h1>
+        <p>Controle, monitoramento e ferramentas de administração do sistema.</p>
+    </header>
+
+    <main>
+        <!-- 
+            SEÇÃO CORRIGIDA: Health Check do Sistema.
+            Adicionamos os spans com os IDs que o JavaScript está procurando.
+        -->
+        <section id="health-check">
+            <h2>Health Check do Sistema</h2>
+            <div class="health-status-container">
+                <div class="status-item">
+                    <span>WebSocket:</span>
+                    <!-- ID CORRETO: 'status-websocket' -->
+                    <span id="status-websocket" class="status-badge status-disconnected">Desconectado</span>
+                </div>
+                <!-- Você pode adicionar mais status aqui no futuro -->
+                <div class="status-item">
+                    <span>Servidor:</span>
+                    <span id="status-server" class="status-badge status-pending">Verificando...</span>
+                </div>
+                <div class="status-item">
+                    <span>Banco de Dados:</span>
+                    <span id="status-db" class="status-badge status-pending">Verificando...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 
+            SEÇÃO CORRIGIDA: Gerenciamento de Sessões Ativas.
+            Adicionamos o span com o ID 'session-count' no título.
+        -->
+        <section id="session-management">
+            <!-- ID CORRETO: 'session-count' -->
+            <h2>Sessões Ativas (<span id="session-count">0</span> )</h2>
+            <p>Monitore e gerencie todos os dispositivos conectados ao sistema em tempo real.</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Sessão</th>
+                            <th>Tipo</th>
+                            <th>Página Atual</th>
+                            <th>Endereço IP</th>
+                            <th>Conectado Em</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="session-table-body">
+                        <!-- Linhas de sessões serão inseridas aqui via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Seção de Gerenciamento de Usuários (geralmente já está correta) -->
+        <section id="user-management">
+            <h2>Gerenciamento de Usuários</h2>
+            <p>Altere a senha de funcionários e gerentes.</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Nível de Acesso</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-table-body">
+                        <!-- Linhas de usuários serão inseridas aqui via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script src="/notificacoes.js"></script>
+    <!-- O script da página é carregado no final -->
+    <script src="/dev.js"></script>
+</body>
+</html>

@@ -1,0 +1,2135 @@
+/* style.css */
+:root {
+    --primary-color: #4a2e2e;
+    --secondary-color: #6a4a4a;
+    --background-color: #f0ebe5;
+    --panel-bg-color: #ffffff;
+    --text-color: #333;
+    --light-text-color: #f0ebe5;
+    --danger-color: #d9534f;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+}
+
+.panel {
+    background-color: var(--panel-bg-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.panel h2 {
+    margin-top: 0;
+    border-bottom: 2px solid var(--background-color);
+    padding-bottom: 10px;
+}
+
+.form-container, #form-produto-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="number"], textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+
+.item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--background-color);
+    cursor: pointer;
+}
+
+.item-list li:hover {
+    background-color: #f9f9f9;
+}
+
+.item-list li.selected {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+}
+
+.delete-btn {
+    background-color: var(--danger-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.produto-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.produto-info img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.hidden {
+    display: none;
+}
+
+.item-list li.dragging {
+    opacity: 0.5;
+    background-color: #e0e0e0;
+}
+/* Em Frontend/Pagina gerencia/adm.css */
+
+/* Estilos para o novo cabeçalho principal */
+.main-header {
+    background-color: #4b2e2e; /* Mesma cor do seu tema */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin: 20px;
+    position: relative; /* Essencial para posicionar o botão de voltar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Estilos para o botão de voltar */
+.main-header .back-button {
+    position: absolute; /* Posiciona o botão em relação ao header */
+    left: 20px; /* Distância da borda esquerda */
+    top: 50%;
+    transform: translateY(-50%); /* Centraliza verticalmente */
+    
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem; /* Tamanho do ícone */
+    transition: transform 0.2s ease-in-out;
+}
+
+.main-header .back-button:hover {
+    transform: translateY(-50%) scale(1.1); /* Efeito de zoom ao passar o mouse */
+}
+
+
+/* =============================================== */
+/* --- Estilos para a Página Home (Dashboard) --- */
+/* =============================================== */
+
+
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between; /* Alinha o título à esquerda e o perfil à direita */
+    align-items: center;
+    padding: 20px 30px;
+    background-color: #4b2e2e;
+    color: white;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.header-title h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.header-title p {
+    margin: 5px 0 0;
+    opacity: 0.8;
+}
+
+.profile-menu {
+    position: relative; /* Essencial para o posicionamento do dropdown */
+}
+
+.profile-menu-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 2.2rem; /* Tamanho do ícone */
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 120%; /* Posição abaixo do ícone */
+    right: 0;
+    background-color: white;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    width: 220px;
+    z-index: 100;
+    overflow: hidden;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.profile-dropdown.hidden {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none; /* Impede cliques quando escondido */
+}
+
+.dropdown-header {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-header strong {
+    display: block;
+    font-size: 1rem;
+}
+
+.dropdown-header span {
+    font-size: 0.85rem;
+    color: #777;
+    text-transform: capitalize; /* Deixa 'geral' como 'Geral' */
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f4f7f6;
+}
+
+.dropdown-item i {
+    margin-right: 10px;
+    width: 20px; /* Alinha os ícones */
+    text-align: center;
+}
+
+/* --- Container Principal da Home --- */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto; /* Centraliza o container */
+    padding: 40px 20px;
+}
+
+/* --- Cabeçalho da Página Home --- */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+}
+
+.dashboard-header p {
+    font-size: 1.1rem;
+    color: #a8a8a8;
+}
+
+/* --- Grid de Navegação (onde ficam os cartões) --- */
+.dashboard-nav-grid {
+    display: grid;
+    /* Cria colunas responsivas: tenta encaixar cartões de 280px, 
+       mas eles podem crescer para preencher o espaço (1fr) */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px; /* Espaçamento entre os cartões */
+}
+
+/* --- Estilo Base dos Cartões de Navegação --- */
+.nav-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 25px;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-card:hover {
+    transform: translateY(-5px); /* Efeito de levantar o cartão */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* Sombra mais pronunciada */
+}
+
+/* --- Conteúdo Interno dos Cartões --- */
+.nav-card .card-icon {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    color: #4b2e2e; /* Cor principal do tema */
+}
+
+.nav-card h2 {
+    font-size: 1.4rem;
+    margin: 0 0 10px 0;
+}
+
+.nav-card p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.5;
+    flex-grow: 1; /* Faz o parágrafo ocupar o espaço para alinhar o rodapé */
+}
+
+.nav-card .card-footer {
+    margin-top: 20px;
+    font-weight: 600;
+    color: #4b2e2e; /* Cor principal do tema */
+    display: flex;
+    align-items: center;
+}
+
+.nav-card .card-footer span {
+    margin-right: 8px;
+}
+
+/* --- Estilo para cartões desativados --- */
+.nav-card.disabled {
+    background-color: #f9f9f9;
+    pointer-events: none; /* Impede o clique */
+    opacity: 0.6;
+}
+
+.nav-card.disabled .card-icon,
+.nav-card.disabled .card-footer {
+    color: #999;
+}
+
+.nav-card.disabled .card-footer::after {
+    content: '(Em breve)';
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #999;
+    margin-left: auto;
+}
+
+/* Adicione no final do seu adm.css */
+.card-logs {
+    background-color: #ffffff;
+}
+
+/* Estilos para a tabela de logs */
+.logs-container {
+    padding: 20px;
+}
+#logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+#logs-table th, #logs-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+#logs-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+#logs-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+.log-action {
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-family: monospace;
+}
+
+.dashboard-header .header-title {
+    display: flex;
+    align-items: center; /* Alinha verticalmente o botão e o título */
+    gap: 15px; /* Adiciona um espaço entre o botão e o título */
+}
+
+/* Estilo principal do botão de voltar */
+.back-button {
+    color: #ffffff; /* Cor do ícone (branco) */
+    font-size: 24px; /* Tamanho do ícone, similar ao de perfil */
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Efeito de hover para dar feedback ao usuário */
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+
+/* /Frontend/Pagina gerencia/adm.css */
+
+/* Estilos para a lista de status de mesas */
+.status-list .mesa-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto; /* Colunas para: Nome da Mesa | Status | Botão */
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-left: 5px solid transparent; /* Borda para indicar status */
+}
+
+.status-list .mesa-item.livre {
+    border-left-color: #28a745; /* Verde para livre */
+}
+
+.status-list .mesa-item.ocupada {
+    border-left-color: #dc3545; /* Vermelho para ocupada */
+    background-color: #fff8f8;
+}
+
+.mesa-info {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-info .cliente-nome {
+    display: block;
+    font-size: 0.95em;
+}
+
+.status-info .cliente-nome .fa-user {
+    margin-right: 5px;
+    color: #6c757d;
+}
+
+.status-tag {
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 12px;
+    color: white;
+    background-color: #dc3545; /* Vermelho (Ocupada) */
+}
+
+.status-tag.livre {
+    background-color: #28a745; /* Verde (Livre) */
+}
+
+
+/* /Pagina gerencia/adm.css */
+
+/* Layout de duas colunas */
+.main-content-split {
+    display: grid;
+    grid-template-columns: 350px 1fr; /* Coluna esquerda fixa, direita flexível */
+    gap: 20px;
+    align-items: start;
+}
+
+.split-panel-left, .split-panel-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Estilo para lista de mesas clicável */
+.clickable-list .mesa-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.clickable-list .mesa-list-item:hover {
+    background-color: #f0f0f0;
+}
+
+.clickable-list .mesa-list-item.active {
+    background-color: #e0e7ff;
+    border-left: 4px solid #4f46e5;
+    font-weight: bold;
+}
+
+.clickable-list .mesa-list-item .delete-btn {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.clickable-list .mesa-list-item:hover .delete-btn {
+    opacity: 1;
+}
+
+/* Estilos para o painel de detalhes (histórico) */
+.session-history .placeholder-text {
+    text-align: center;
+    color: #666;
+    padding: 40px;
+    font-size: 1.1em;
+}
+.session-history .placeholder-text i {
+    font-size: 2em;
+    display: block;
+    margin-bottom: 15px;
+    color: #4f46e5;
+}
+
+.session-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 5px solid #ccc; /* Padrão para finalizada */
+}
+
+.session-card.ativa {
+    border-left-color: #22c55e; /* Verde para ativa */
+}
+
+.session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.status-tag {
+    font-size: 0.8em;
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+.status-tag.ativa { background-color: #22c55e; }
+.status-tag.finalizada { background-color: #6b7280; }
+
+.session-body p {
+    margin: 5px 0;
+    color: #333;
+}
+
+.session-actions {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 8px 12px;
+    border: none;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.action-btn.print-btn { background-color: #3b82f6; } /* Azul */
+.action-btn.close-btn { background-color: #fc0303; } /* Vermelho */
+
+
+/* Adicione este bloco de código ao final do seu arquivo adm.css */
+
+/* Estilos para os botões de ação (Editar e Excluir) */
+.action-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-left: 10px;
+    padding: 5px;
+    line-height: 1;
+}
+
+.edit-btn {
+    color: #007bff; /* Azul */
+}
+
+.delete-btn {
+    color: #dc3545; /* Vermelho */
+}
+
+.edit-btn:hover { color: #0056b3; }
+.delete-btn:hover { color: #c82333; }
+
+/* Estilos para o Modal de Edição */
+.modal {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 25px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideIn { from { transform: translateY(-50px); } to { transform: translateY(0); } }
+
+.close-btn {
+    color: #ffffff;
+    float: right;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#editForm label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-weight: bold;
+    color: #333;
+}
+
+#editForm input[type="text"],
+#editForm input[type="number"],
+#editForm textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#editForm textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.modal-footer {
+    margin-top: 25px;
+    text-align: right;
+}
+
+.save-btn, .cancel-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.save-btn {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+.cancel-btn {
+    background-color: #6c757d; /* Cinza */
+    color: white;
+    margin-left: 10px;
+}
+
+/* /Frontend/Pagina gerencia/adm.css */
+
+/* --- Estilos para o Toggle Switch --- */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin: 0 10px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #28a745; /* Verde */
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* --- Estilos para Itens Desativados --- */
+li.inactive {
+    opacity: 0.5;
+    background-color: #f8f9fa;
+    text-decoration: line-through;
+}
+
+li.inactive .slider {
+    background-color: #dc3545; /* Vermelho quando desligado */
+}
+
+/* --- Estilos para Campos de Happy Hour --- */
+.happy-hour-toggle {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+#happy-hour-fields {
+    padding-left: 20px;
+    border-left: 2px solid #eee;
+    margin-bottom: 10px;
+}
+#happy-hour-fields.hidden {
+    display: none;
+}
+
+
+.pedidos-container {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.pedidos-container ul {
+    list-style: none;
+    padding-left: 10px;
+}
+
+.pedido-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 0.9em;
+}
+
+/* Estilo para o item cancelado */
+.pedido-item.cancelado {
+    text-decoration: line-through;
+    color: #999;
+    opacity: 0.7;
+}
+
+.cancel-item-btn {
+    background: none;
+    border: none;
+    color: #e74c3c; /* Vermelho */
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.cancel-item-btn:hover {
+    color: #c0392b; /* Vermelho mais escuro */
+}
+
+.motivo-cancelamento {
+    font-style: italic;
+    font-size: 0.9em;
+    color: #e74c3c;
+}
+
+/* ======================================================= */
+/* --- ESTILOS FINAIS E ROBUSTOS PARA O MODAL DE EDIÇÃO --- */
+/* ======================================================= */
+
+/* O contêiner que escurece a tela inteira */
+.modal-overlay {
+    position: fixed !important; /* Força o modal a flutuar sobre a página */
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1000 !important; /* Garante que ele fique na frente de tudo */
+    
+    display: flex !important; /* Usa flexbox para centralizar o conteúdo */
+    justify-content: center !important;
+    align-items: center !important;
+
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semi-transparente */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Classe para esconder o modal suavemente */
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none; /* Impede cliques quando o modal está escondido */
+}
+
+/* O conteúdo branco do modal */
+.modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 500px;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.hidden .modal-content {
+    transform: scale(0.9);
+}
+
+/* --- Estilos para o conteúdo dentro do modal --- */
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.modal-header h3 { margin: 0; font-size: 1.4em; color: #333; }
+
+.modal-close-btn { background: none; border: none; font-size: 2em; line-height: 1; cursor: pointer; color: #888; }
+.modal-close-btn:hover { color: #333; }
+
+.modal-body ul { list-style: none; padding: 0; max-height: 60vh; overflow-y: auto; }
+
+.modal-body .pedido-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 8px; border-bottom: 1px solid #f0f0f0; }
+.modal-body .pedido-item:last-child { border-bottom: none; }
+
+.modal-body .pedido-item.cancelado { text-decoration: line-through; color: #999; opacity: 0.7; }
+
+.modal-body .cancel-item-btn { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1.2em; padding: 5px; }
+.modal-body .cancel-item-btn:hover { color: #c0392b; }
+
+.modal-body .motivo-cancelamento { font-style: italic; font-size: 0.9em; color: #e74c3c; }
+
+
+/* --- ESTILOS ADICIONAIS PARA O MODAL DE DETALHES --- */
+
+.modal-footer {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 20px;
+    text-align: right;
+}
+
+.details-summary {
+    margin-top: 20px;
+    border-top: 2px solid #f0f0f0;
+    padding-top: 15px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 1.1em;
+}
+
+.summary-item.total {
+    font-weight: bold;
+    font-size: 1.3em;
+    color: #27ae60; /* Verde para o total */
+    border-top: 1px solid #ddd;
+    margin-top: 5px;
+    padding-top: 10px;
+}
+
+.summary-item span:first-child {
+    color: #555;
+}
+
+
+/* ======================================================= */
+/* --- ESTILOS PARA O CANCELAMENTO PROFISSIONAL NO MODAL --- */
+/* ======================================================= */
+
+/* Contêiner para o formulário de cancelamento que substitui o botão */
+.cancel-form-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaçamento entre os elementos */
+    width: 100%;
+    animation: fadeIn 0.3s ease; /* Efeito de aparição suave */
+}
+
+.cancel-form-container input[type="text"] {
+    flex-grow: 1; /* Faz o input ocupar o espaço disponível */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.cancel-form-container .confirm-cancel-btn,
+.cancel-form-container .undo-cancel-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 1.1em;
+    transition: background-color 0.2s ease;
+}
+
+.cancel-form-container .confirm-cancel-btn {
+    color: #27ae60; /* Verde para confirmar */
+}
+.cancel-form-container .confirm-cancel-btn:hover {
+    background-color: #e8f8ee;
+}
+
+.cancel-form-container .undo-cancel-btn {
+    color: #888; /* Cinza para cancelar a ação */
+}
+.cancel-form-container .undo-cancel-btn:hover {
+    background-color: #f1f1f1;
+}
+
+/* Animação de fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+/* Estilo para a página de chamados (chamados.css) */
+
+.chamados-container {
+    padding: 2rem;
+}
+
+.chamados-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.chamado-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chamado-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.chamado-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    color: #fff;
+}
+
+.chamado-card .card-header .fa-bell {
+    font-size: 1.5rem;
+}
+
+.chamado-card .mesa-nome {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.chamado-card .card-body {
+    padding: 1.25rem;
+    flex-grow: 1;
+}
+
+.chamado-card .horario {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0;
+}
+
+.chamado-card .card-footer {
+    padding: 1.25rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    text-align: center;
+}
+
+/* Estilo do botão de atendimento */
+.btn-atender {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-atender:hover {
+    background-color: #0056b3;
+}
+
+.btn-atender:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Estilos de Status */
+.chamado-card.pendente .card-header {
+    background: linear-gradient(135deg, #ffc107, #ff9800); /* Laranja/Amarelo para pendente */
+}
+
+.chamado-card.atendido .card-header {
+    background: linear-gradient(135deg, #28a745, #218838); /* Verde para atendido */
+}
+
+.chamado-card.atendido .card-footer {
+    font-weight: 600;
+    color: #28a745;
+    font-size: 1.1rem;
+}
+
+.empty-message {
+    grid-column: 1 / -1; /* Ocupa todas as colunas */
+    text-align: center;
+    font-size: 1.2rem;
+    color: #6c757d;
+    padding: 3rem;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+}
+
+
+/* Estilos para o contador de notificação nos cards do dashboard */
+/* Adicionar em /Pagina gerencia/adm.css */
+
+.nav-card .card-icon {
+    position: relative; /* Necessário para posicionar o badge corretamente */
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: #dc3545; /* Vermelho de perigo */
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+.notification-badge.hidden {
+    transform: scale(0);
+    display: flex; /* Mantém o flex para a animação funcionar melhor */
+}
+
+
+
+/* ================================================== */
+/* ESTILOS DA PÁGINA DE RELATÓRIOS (relatorios.html)  */
+/* ================================================== */
+
+.relatorios-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.relatorios-filtros {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 350px;
+}
+
+.relatorios-filtros label {
+    font-weight: 600;
+    color: #555;
+}
+
+.relatorios-filtros select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Grid para os Cards de KPI */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.kpi-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.kpi-icon {
+    font-size: 24px;
+    color: #fff;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.kpi-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.kpi-title {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.kpi-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #343a40;
+}
+
+/* Grid para os Gráficos */
+.graficos-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Gráfico de vendas maior que o de pagamentos */
+    gap: 20px;
+}
+
+.grafico-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    height: 400px; /* Altura fixa para consistência */
+    display: flex;
+    flex-direction: column;
+}
+
+.grafico-card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .graficos-grid {
+        grid-template-columns: 1fr; /* Empilha os gráficos em telas menores */
+    }
+}
+
+@media (max-width: 768px) {
+    .relatorios-container {
+        padding: 15px;
+    }
+    .kpi-grid {
+        grid-template-columns: 1fr; /* Um card por linha em telas muito pequenas */
+    }
+}
+
+
+/* Adicione isso ao seu arquivo adm.css */
+
+.relatorios-filtros {
+    display: flex;
+    justify-content: space-between; /* Alinha os itens nas extremidades */
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+}
+
+.botao-acao {
+    padding: 10px 15px;
+    background-color: #c82333; /* Cor vermelha para PDF */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Espaço entre o ícone e o texto */
+    transition: background-color 0.3s;
+}
+
+.botao-acao:hover {
+    background-color: #a21b29;
+}
+
+
+
+.header-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+}
+
+/* Estilo para o novo botão de limpar chamados */
+.btn-limpar-tudo {
+    background-color: #c82333; /* Vermelho mais escuro e sóbrio */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 20px; /* Espaçamento do título */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaço entre o ícone e o texto */
+}
+
+.btn-limpar-tudo:hover {
+    background-color: #a81d2a; /* Vermelho ainda mais escuro no hover */
+    transform: translateY(-2px); /* Efeito de elevação */
+}
+
+.btn-limpar-tudo:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsividade para o cabeçalho */
+@media (max-width: 600px) {
+    .header-title {
+        justify-content: flex-start;
+    }
+    
+    .header-title h1 {
+        margin-bottom: 10px;
+        width: 100%; /* Faz o título ocupar a largura toda */
+    }
+
+    .btn-limpar-tudo {
+        margin-left: 0; /* Remove a margem esquerda em telas pequenas */
+        margin-top: 5px; /* Adiciona espaço acima */
+        width: 100%; /* Faz o botão ocupar a largura toda */
+        justify-content: center; /* Centraliza o conteúdo do botão */
+    }
+}
+
+
+
+/* No seu arquivo CSS (ex: pedidos.css) */
+
+/* Garante que o contêiner principal ocupe o espaço restante na tela */
+.pedidos-container {
+    display: grid; /* Você já deve ter isso */
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); /* Você já deve ter isso */
+    gap: 25px; /* Você já deve ter isso */
+    padding: 25px; /* Você já deve ter isso */
+
+    /* --- ADICIONE ESTAS LINHAS --- */
+    flex-grow: 1; /* Faz o main crescer para ocupar o espaço vertical disponível */
+    width: 100%;  /* Garante que ele ocupe toda a largura */
+    align-content: flex-start; /* Alinha os cards no topo quando há espaço sobrando */
+}
+
+/* Garante que a mensagem de "sem sessões" seja visível quando não estiver escondida */
+.mensagem-sem-sessoes {
+    grid-column: 1 / -1; /* Ocupa toda a largura da grid */
+    text-align: center;
+    padding: 50px;
+    color: #6c757d;
+    
+    /* --- ADICIONE ESTA LINHA PARA GARANTIR --- */
+    display: block; /* Garante que o elemento seja um bloco visível por padrão */
+}
+
+/* A classe .hidden é a única que deve esconder a mensagem */
+.mensagem-sem-sessoes.hidden {
+    display: none !important; /* Usa !important para garantir que nada sobreponha esta regra */
+}
+
+/* Adicione isso ao seu CSS principal (ex: adm.css) para garantir a estrutura da página */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o container principal ocupe pelo menos toda a altura da tela */
+}
+
+
+/* ==================================================================
+ * CSS DA PÁGINA DE CONFIGURAÇÕES (VERSÃO PROFISSIONAL)
+ * Adicionar ao final do seu arquivo adm.css
+ * ================================================================== */
+
+/* --- Grid Principal da Página de Configurações --- */
+.config-grid {
+    display: grid;
+    /* Cria um layout responsivo com cards que se ajustam */
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px; /* Espaçamento consistente */
+    padding: 24px;
+    background-color: #f8f9fa; /* Fundo geral da página */
+}
+
+/* --- Estilo Base do Card de Configuração --- */
+.config-card {
+    background-color: #ffffff;
+    border-radius: 12px; /* Bordas mais suaves */
+    border: 1px solid #e9ecef;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.config-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Cabeçalho do Card --- */
+.config-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e9ecef;
+    background-color: #f8f9fa; /* Leve destaque para o cabeçalho */
+}
+
+.config-card-header i {
+    font-size: 1.2rem;
+    color: #495057;
+}
+
+.config-card-header h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #212529;
+    font-weight: 600;
+}
+
+/* --- Corpo do Card --- */
+.config-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Espaçamento entre os elementos do corpo */
+    flex-grow: 1;
+}
+
+.config-card-body p {
+    margin: 0 0 8px 0;
+    color: #6c757d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* --- Estilos de Formulário (Inputs, Selects) --- */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group-inline {
+    display: flex;
+    gap: 12px;
+}
+
+.form-group label,
+.form-group-inline label {
+    font-weight: 500;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* --- Botões --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn.full-width {
+    width: 100%;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+.btn-primary:hover { background-color: #0069d9; }
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+.btn-success:hover { background-color: #218838; }
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+.btn-danger:hover { background-color: #c82333; }
+
+/* --- Card de Permissões --- */
+.permissions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 12px;
+}
+
+.permission-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.permission-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #007bff; /* Cor do checkbox quando marcado */
+}
+
+.permission-item label {
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+/* --- Card da Zona de Perigo --- */
+.danger-zone {
+    border-color: #f5c6cb; /* Borda vermelha */
+    background-color: #f8d7da; /* Fundo vermelho claro */
+}
+
+.danger-zone .config-card-header {
+    background-color: transparent;
+    border-bottom: 1px solid #f5c6cb;
+}
+
+.danger-zone .config-card-header h2,
+.danger-zone .config-card-header i {
+    color: #721c24; /* Texto e ícone mais escuros */
+}
+
+.danger-zone .config-card-body p,
+.danger-zone .danger-action strong,
+.danger-zone .danger-action small {
+    color: #721c24;
+}
+
+.danger-action {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+}
+
+.danger-action strong {
+    font-size: 1.1rem;
+}
+
+.danger-action small {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* --- Estilos para o resultado do relatório --- */
+#relatorio-resultado-container {
+    margin-top: 1rem;
+    padding: 16px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+}
+
+#relatorio-resultado-container ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+#relatorio-resultado-container li {
+    margin-bottom: 8px;
+    color: #343a40;
+}
+
+
+
+/* ==================================================================
+ * CSS PROFISSIONAL PARA O MODAL DE EDIÇÃO DE PEDIDOS
+ * Adicionar ao final do arquivo adm.css
+ * ================================================================== */
+
+/* --- Lista de Pedidos no Modal --- */
+.edit-pedidos-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 60vh; /* Limita a altura e adiciona scroll */
+    overflow-y: auto;
+}
+
+.edit-pedido-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.2s;
+}
+
+.edit-pedido-item:last-child {
+    border-bottom: none;
+}
+
+.edit-pedido-item:not(.cancelado):hover {
+    background-color: #f8f9fa;
+}
+
+/* --- Informações do Item (Nome, Preço) --- */
+.edit-pedido-item .item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.edit-pedido-item .item-nome {
+    font-weight: 600;
+    color: #343a40;
+    font-size: 1rem;
+}
+
+.edit-pedido-item .item-preco {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* --- Ações (Botão Cancelar, Status Cancelado) --- */
+.edit-pedido-item .item-actions .action-btn.cancel-item-btn {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+}
+
+.edit-pedido-item .item-actions .action-btn.cancel-item-btn:hover {
+    background-color: #f1b0b7;
+    border-color: #eea2aa;
+    transform: translateY(-1px);
+}
+
+.edit-pedido-item.cancelado {
+    background-color: #f1f3f5;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.edit-pedido-item.cancelado .item-nome,
+.edit-pedido-item.cancelado .item-preco {
+    color: #6c757d;
+}
+
+.motivo-cancelamento {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #28a745; /* Verde para indicar status finalizado */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Em adm.css, adicione ao final */
+
+.edit-pedido-item .motivo-texto {
+    font-size: 0.85rem;
+    color: #dc3545; /* Vermelho para destacar o motivo */
+    font-style: italic;
+    margin-top: 4px;
+}
+
+.edit-pedido-item .status-cancelado {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #6c757d; /* Cinza para o status */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+/* Em adm.css, adicione ao final */
+
+.session-body .finalizado-por {
+    font-size: 0.9em;
+    color: #28a745; /* Verde para indicar sucesso/finalização */
+    margin-top: 4px;
+}
+
+
+
+/* ================================================================== */
+/* --- ESTILOS PARA A PÁGINA DE LOGS (logs.html) --- */
+/* ================================================================== */
+
+/* Container principal da página de logs */
+.logs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Espaçamento entre os filtros e a tabela */
+}
+
+/* Cabeçalho com os filtros de busca */
+.logs-filter-header {
+    background-color: #ffffff;
+    padding: 1.25rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: flex-end; /* Alinha os itens na parte de baixo */
+    gap: 1.5rem;
+    flex-wrap: wrap; /* Permite que os filtros quebrem a linha em telas menores */
+}
+
+/* Grupo de filtro individual (label + input) */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1; /* Faz com que os grupos de filtro ocupem o espaço disponível */
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Estilo para os inputs dos filtros, herdando do .form-control */
+.logs-filter-header .form-control {
+    min-width: 200px; /* Largura mínima para os inputs */
+}
+
+/* Container para os botões de ação */
+.filter-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* Tabela de logs */
+#logs-table {
+    width: 100%;
+    border-collapse: collapse; /* Remove espaços entre as células */
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden; /* Garante que o border-radius seja aplicado nas bordas da tabela */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+#logs-table th,
+#logs-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef; /* Linha sutil entre as linhas */
+}
+
+#logs-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #343a40;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#logs-table tbody tr:hover {
+    background-color: #f1f3f5; /* Efeito de hover suave */
+}
+
+/* Estilo para a tag da ação, para dar destaque */
+.log-action {
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 0.25rem 0.6rem;
+    border-radius: 15px; /* Pílula arredondada */
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-block;
+    white-space: nowrap; /* Evita que a tag quebre a linha */
+}
+
+/* Centraliza texto para mensagens de "nenhum log" ou "carregando" */
+#logs-table .text-center {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+}
+
+
+/* =============================================== */
+/* ESTILOS ESPECÍFICOS PARA A PÁGINA DE SUPORTE    */
+/* =============================================== */
+
+/* Contêiner principal do formulário de suporte */
+.suporte-main-content {
+    padding: 30px 40px;
+}
+
+.suporte-description {
+    text-align: center;
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* Formulário de Suporte */
+.suporte-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.suporte-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.suporte-form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #1a2b4d;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Inputs e Textarea do formulário de suporte */
+.suporte-input,
+.suporte-textarea {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    background-color: #fff; /* Fundo branco para melhor contraste */
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.suporte-input:focus,
+.suporte-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+}
+
+.suporte-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Botão de envio do formulário de suporte */
+.suporte-form-actions {
+    text-align: center;
+}
+
+.suporte-btn-submit {
+    background: linear-gradient(45deg, #850909, #3d0404);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.suporte-btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 94, 0, 0.4);
+}
+
+.suporte-btn-submit:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(255, 38, 0, 0.3);
+}
+
+
+
+
+/* ================================================================== */
+/* --- ESTILOS ATUALIZADOS PARA OS BOTÕES DE AÇÃO --- */
+/* ================================================================== */
+
+/* Estilo base para todos os botões de ação */
+.session-actions .action-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.session-actions .action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilo para o botão "Ver Conta" (Sessão Ativa) */
+.session-actions .action-btn.print-btn {
+    background-color: #007bff; /* Azul primário */
+}
+
+.session-actions .action-btn.print-btn:hover {
+    background-color: #0056b3; /* Azul mais escuro */
+}
+
+/* Estilo para o botão "Editar Pedidos" (Sessão Ativa) */
+.session-actions .action-btn.edit-btn {
+    background-color: #ffc107; /* Amarelo/Laranja de aviso */
+    color: #212529; 
+}
+
+.session-actions .action-btn.edit-btn:hover {
+    background-color: #e0a800; /* Amarelo mais escuro */
+}
+
+/* Estilo para o botão "Ver Detalhes" (Sessão Finalizada) */
+.session-actions .action-btn.view-details-btn {
+    background-color: #6c757d; /* Cinza/Secundário */
+}
+
+.session-actions .action-btn.view-details-btn:hover {
+    background-color: #5a6268; /* Cinza mais escuro */
+}
+
+
+/* ================================================================== */
+/* --- ESTILOS PARA O MODAL DE DETALHES DA CONTA (gerencia_mesas.js) --- */
+/* ================================================================== */
+
+/* Lista de pedidos dentro do modal */
+.details-pedidos-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 40vh; /* Altura máxima para a lista, com barra de rolagem se necessário */
+    overflow-y: auto;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 15px;
+}
+
+/* Cada item individual na lista de pedidos */
+.details-pedido-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Alinha os itens no topo */
+    padding: 12px 8px;
+    border-top: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.details-pedido-item:first-child {
+    border-top: none;
+}
+
+/* Informações do item (nome, quantidade, observação) */
+.details-pedido-item .item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Espaçamento entre nome, obs e motivo */
+}
+
+.details-pedido-item .item-nome {
+    font-weight: 600;
+    color: #333;
+}
+
+.details-pedido-item .item-obs {
+    font-style: italic;
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Preço do item */
+.details-pedido-item .item-preco {
+    font-weight: 600;
+    color: #28a745; /* Verde para o preço */
+    white-space: nowrap; /* Impede que o preço quebre a linha */
+    margin-left: 15px;
+}
+
+/* --- ESTILOS ESPECÍFICOS PARA ITENS CANCELADOS --- */
+
+/* Estilo principal para o item cancelado */
+.details-pedido-item.cancelado {
+    text-decoration: line-through; /* Risca o texto */
+    opacity: 0.6;                  /* Deixa o item um pouco transparente */
+    background-color: #f8f9fa;     /* Fundo cinza claro para diferenciar */
+}
+
+/* Remove o destaque de preço para itens cancelados */
+.details-pedido-item.cancelado .item-preco {
+    display: none; /* Oculta o preço do item cancelado */
+}
+
+/* Estilo para o texto do motivo do cancelamento */
+.motivo-cancelamento {
+    display: block;
+    font-size: 0.85em;
+    color: #dc3545; /* Vermelho para indicar o motivo do cancelamento */
+    font-style: italic;
+    text-decoration: none; /* Remove o risco do texto do motivo */
+    margin-top: 4px;
+}
+
+/* --- SEÇÃO DE TOTAL E AÇÕES --- */
+
+/* Contêiner para o total da conta */
+.details-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #0056b3; /* Azul para o total */
+}
+
+/* Contêiner para os botões de ação (ex: Gerar Recibo) */
+.details-actions {
+    text-align: right;
+    padding: 10px 8px 0;
+}
+
+/* Estilo para o botão de gerar recibo */
+.details-actions .print-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+.details-actions .print-btn:hover {
+    background-color: #0056b3;
+}
+
+.details-actions .print-btn i {
+    margin-right: 8px;
+}
+
+
+/* No seu arquivo .css */
+
+/* Seletor específico para o contêiner do gráfico de pagamentos */
+canvas#grafico-metodos-pagamento {
+    height: 380px !important; /* Use !important se outra regra estiver sobrescrevendo */
+}

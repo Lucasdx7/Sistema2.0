@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatórios de Vendas - Skina 67</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/adm.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Adicionando a biblioteca de gráficos Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Adicionando as bibliotecas para gerar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <a href="/gerencia-home" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="header-title">
+                <h1>Gerenciar Categoria/produtos</h1>
+                
+            </div>
+            <div class="profile-menu">
+                <button id="profile-menu-btn" class="profile-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown hidden">
+                    <div class="dropdown-header">
+                        <strong id="dropdown-user-name">Nome do Usuário</strong>
+                        <span id="dropdown-user-role">Nível de Acesso</span>
+                    </div>
+                    <a href="#" id="logout-btn" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </header>
+
+                <main id="relatorio-para-pdf" class="relatorios-container">
+            <!-- Filtros e Controles -->
+            <div class="relatorios-filtros">
+                <div>
+                    <label for="periodo-filtro">Visualizar Período:</label>
+                    <select id="periodo-filtro">
+                        <option value="hoje">Hoje</option>
+                        <option value="semana" selected>Esta Semana</option>
+                        <option value="mes">Este Mês</option>
+                        <option value="ano">Este Ano</option>
+                    </select>
+                </div>
+                <button id="btn-criar-pdf" class="botao-acao">
+                    <i class="fas fa-file-pdf"></i> Criar PDF
+                </button>
+            </div>
+
+            <!-- Cards de Resumo (KPIs) -->
+            <div class="kpi-grid">
+                <!-- KPIs Existentes -->
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background-color: #28a745;">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-title">Vendas Totais</span>
+                        <span id="kpi-vendas-totais" class="kpi-value">R$ 0,00</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background-color: #007bff;">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-title">Total de Pedidos</span>
+                        <span id="kpi-total-pedidos" class="kpi-value">0</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background-color: #ffc107;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-title">Ticket Médio</span>
+                        <span id="kpi-ticket-medio" class="kpi-value">R$ 0,00</span>
+                    </div>
+                </div>
+                <!-- NOVO KPI: Produto Mais Vendido -->
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background-color: #dc3545;">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-title">Produto Mais Vendido</span>
+                        <span id="kpi-produto-mais-vendido" class="kpi-value">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="graficos-grid">
+                <!-- Gráficos Existentes -->
+                <div class="grafico-card">
+                    <h3>Vendas Durante o Período</h3>
+                    <canvas id="grafico-vendas-ano"></canvas>
+                </div>
+                <div class="grafico-card">
+                    <h3>Vendas por Método de Pagamento</h3>
+                    <canvas id="grafico-metodos-pagamento"></canvas>
+                </div>
+                <!-- NOVOS GRÁFICOS -->
+                <div class="grafico-card">
+                    <h3>Top 5 Produtos Mais Vendidos</h3>
+                    <canvas id="grafico-produtos-vendidos"></canvas>
+                </div>
+                <div class="grafico-card">
+                    <h3>Horários de Pico de Vendas</h3>
+                    <canvas id="grafico-horarios-pico"></canvas>
+                </div>
+            </div>
+        </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/notificacoes.js"></script>
+    <script src="/relatorios.js"></script>
+</body>
+</html>

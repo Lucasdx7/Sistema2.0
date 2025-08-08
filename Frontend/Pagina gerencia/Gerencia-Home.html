@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Gerenciamento - Skina 67</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/adm.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-title">
+                <h1>Painel de Controle</h1>
+                <p>Bem-vindo ao centro de gerenciamento do Skina 67.</p>
+            </div>
+            <div class="profile-menu">
+                <button id="profile-menu-btn" class="profile-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown hidden">
+                    <div class="dropdown-header">
+                        <strong id="dropdown-user-name">Nome do Usuário</strong>
+                        <span id="dropdown-user-role">Nível de Acesso</span>
+                    </div>
+                    <a href="#" id="logout-btn" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <nav class="dashboard-nav-grid">
+            <a href="/gerencia" class="nav-card card-cardapio permissao-geral">
+                <div class="card-icon"><i class="fas fa-utensils"></i></div>
+                <h2>Gerenciar Cardápio</h2>
+                <p>Adicione, remova ou edite categorias e produtos do cardápio em tempo real.</p>
+                <div class="card-footer"><span>Acessar</span><i class="fas fa-arrow-right"></i></div>
+            </a>
+            
+            <a href="/gerencia-mesas" class="nav-card card-mesas permissao-geral">
+                <div class="card-icon"><i class="fas fa-tablet-alt"></i></div>
+                <h2>Gerenciar Mesas</h2>
+                <p>Adicione, remova e visualize os logins de acesso para os tablets das mesas.</p>
+                <div class="card-footer"><span>Acessar</span><i class="fas fa-arrow-right"></i></div>
+            </a>
+            
+            <!-- ================================================== -->
+            <!-- NOVO CARD DE CHAMADOS DE GARÇOM ADICIONADO AQUI      -->
+            <!-- ================================================== -->
+            <!-- Em /Pagina gerencia/gerencia-home.html -->
+                <a href="/chamados" class="nav-card card-chamados permissao-geral">
+                    <div class="card-icon">
+                        <i class="fas fa-bell"></i>
+                        <!-- O contador de notificação -->
+                        <span id="chamados-count-badge" class="notification-badge hidden">0</span>
+                    </div>
+                    <h2>Chamados de Garçom</h2>
+                    <p>Acompanhe em tempo real as mesas que estão solicitando atendimento.</p>
+                    <div class="card-footer"><span>Acessar</span><i class="fas fa-arrow-right"></i></div>
+                </a>
+
+            <!-- ================================================== -->
+
+            <a href="/logs" class="nav-card card-logs permissao-geral">
+                <div class="card-icon"><i class="fas fa-history"></i></div>
+                <h2>Logs do Sistema</h2>
+                <p>Visualize o histórico de todas as alterações importantes feitas no sistema.</p>
+                <div class="card-footer"><span>Acessar</span><i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <a href="/acompanhar" class="nav-card card-pedidos permissao-geral">
+                <div class="card-icon">
+                    <i class="fas fa-receipt"></i>
+                    <!-- O contador de notificação para pedidos -->
+                    <span id="pedidos-count-badge" class="notification-badge hidden">0</span>
+                </div>
+                <h2>Acompanhar Pedidos</h2>
+                <p>Visualize os pedidos em andamento, controle o status e gerencie as entregas.</p>
+                <div class="card-footer"><span>Acessar</span><i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <a href="/relatorios" class="nav-card card-logs permissao-geral">
+                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                <h2>Relatórios de Vendas</h2>
+                <p>Analise o desempenho de vendas e obtenha insights valiosos.</p>
+                <div class="card-footer"><span class="em-breve-tag">Acessar</span><i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <a href="/configuracoes" class="nav-card card-config permissao-geral">
+                <div class="card-icon"><i class="fas fa-cog"></i></div>
+                <h2>Configurações</h2>
+                <p>Gerencie usuários, fontes, permissões e realize ações avançadas no sistema.</p>
+                <div class="card-footer"><span>Acessar Configurações</span><i class="fas fa-arrow-right"></i></div>
+            </a>
+
+              <!-- ================================================== -->
+            <!--           NOVO CARD DE SUPORTE TÉCNICO             -->
+            <!-- ================================================== -->
+            <a href="/suporte" class="nav-card card-suporte">
+                <div class="card-icon"><i class="fas fa-life-ring"></i></div>
+                <h2>Suporte Técnico</h2>
+                <p>Precisa de ajuda? Abra um chamado de suporte diretamente com a equipe.</p>
+                <div class="card-footer"><span>Solicitar Suporte</span><i class="fas fa-arrow-right"></i></div>
+            </a>
+            <!-- ================================================== -->
+
+        </nav>
+    </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/notificacoes.js"></script>
+    <script src="/gerencia-home.js"></script>
+</body>
+</html>

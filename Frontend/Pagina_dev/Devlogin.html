@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Restrito - DEV</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #1a253c; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center; width: 320px; }
+        h1 { color: #1a253c; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 30px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background-color: #c82333; }
+        .error-message { color: #dc3545; margin-top: 15px; font-weight: bold; display: none; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Acesso Restrito</h1>
+        <p>Painel do Desenvolvedor</p>
+        <form id="dev-login-form">
+            <!-- Os IDs aqui estão corretos e não precisam mudar -->
+            <input type="text" id="username" placeholder="Usuário DEV" required>
+            <input type="password" id="password" placeholder="Senha DEV" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <p id="error-message" class="error-message"></p>
+    </div>
+
+    <!-- ... (seus outros scripts) ... -->
+
+    <script>
+        // O script está dentro do seu HTML
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('dev-login-form');
+            if (!loginForm) {
+                console.error('Formulário de login não encontrado!');
+                return;
+            }
+
+            loginForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                // --- A CORREÇÃO ESTÁ AQUI ---
+                // Altere 'dev-username' para 'username' e 'dev-password' para 'password'
+                // para corresponder aos IDs do seu HTML.
+                const userInput = document.getElementById('username'); 
+                const passwordInput = document.getElementById('password');
+
+                // O resto do código já está correto
+                const usuarioValue = userInput.value;
+                const senhaValue = passwordInput.value;
+
+                if (!usuarioValue || !senhaValue) {
+                    alert('Por favor, preencha o usuário e a senha.');
+                    return;
+                }
+
+                const submitButton = loginForm.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Entrando...'; // Ícone de spinner removido por simplicidade, adicione se tiver FontAwesome
+
+                try {
+                    const response = await fetch('/auth/dev-login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            usuario: usuarioValue,
+                            senha: senhaValue
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        localStorage.setItem('token', data.token);
+                        window.location.href = '/dev-painel';
+                    } else {
+                        throw new Error(data.message || 'Ocorreu um erro desconhecido.');
+                    }
+                } catch (error) {
+                    console.error('Falha no processo de login:', error);
+                    alert(`Erro no login: ${error.message}`);
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Entrar';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
