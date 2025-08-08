@@ -1,7 +1,8 @@
 
+
 # Sistema de Gestão de Cardápio e Pedidos
 
-![Status do Projeto](https://img.shields.io/badge/status-estável-brightgreen) ![Progresso](https://img.shields.io/badge/progresso-95%25-blue) ![Tecnologia](https://img.shields.io/badge/backend-Node.js%20%26%20Express-green) ![Tecnologia](https://img.shields.io/badge/frontend-HTML,%20CSS,%20JS-blue) ![Banco de Dados](https://img.shields.io/badge/database-MySQL-blueviolet)
+![Status do Projeto](https://img.shields.io/badge/status-estável-brightgreen) ![Progresso](https://img.shields.io/badge/progresso-96%25-blue) ![Tecnologia](https://img.shields.io/badge/backend-Node.js%20%26%20Express-green) ![Tecnologia](https://img.shields.io/badge/frontend-HTML,%20CSS,%20JS-blue) ![Banco de Dados](https://img.shields.io/badge/database-MySQL-blueviolet)
 
 Sistema de gerenciamento completo para restaurantes, com foco em segurança, usabilidade e atualizações em tempo real. A plataforma permite que a gerência administre o cardápio e mesas, enquanto os clientes realizam seus pedidos diretamente por um tablet. Inclui um painel de desenvolvedor para monitoramento e administração avançada do sistema.
 
@@ -17,7 +18,7 @@ O sistema utiliza WebSockets para garantir que qualquer alteração feita pela g
 
 ---
 
-## 🚀 Status Atual (Progresso: 95%)
+## 🚀 Status Atual (Progresso: 96%)
 
 O projeto está em uma fase madura e estável, com o fluxo completo de interação do cliente e as principais funcionalidades de gerenciamento e desenvolvimento implementadas, testadas e refatoradas para máxima organização e manutenibilidade.
 
@@ -44,7 +45,10 @@ O projeto está em uma fase madura e estável, com o fluxo completo de interaç�
     -   [x] **Gerenciamento de Conexões:**
         -   [x] Desconectar remotamente qualquer cliente do WebSocket.
         -   [x] **Forçar Fechamento de Conta:** Finalizar qualquer sessão de cliente diretamente do painel, com registro de log e atualização em tempo real para todas as interfaces.
-    -   [x] **Gerenciamento de Usuários:** Visualizar todos os usuários do sistema e alterar suas senhas.
+    -   [x] **Gerenciamento de Usuários Avançado:** Visualizar, editar (nome, email, nível de acesso) e alterar senhas de todos os usuários do sistema.
+    -   [x] **Dashboard de Monitoramento do Sistema (Health Check):** Status em tempo real do Servidor, Banco de Dados e latência da API.
+    -   [x] **Visualizador de Logs em Tempo Real:** Transmissão ao vivo dos logs do servidor para o painel, com filtros e cores.
+    -   [x] **Análise de Performance da API:** Monitoramento do tempo de resposta, total de chamadas e taxa de erro de cada endpoint da API.
 -   [x] **Dashboard de Relatórios Avançados:**
     -   [x] **Visualização por Período:** Filtros dinâmicos para analisar vendas.
     -   [x] **KPIs Abrangentes:** Métricas chave como Vendas Totais, Ticket Médio e Produto Mais Vendido.
@@ -56,6 +60,7 @@ O projeto está em uma fase madura e estável, com o fluxo completo de interaç�
     -   [x] **Identificação de Conexão:** O cliente agora se identifica corretamente no WebSocket, eliminando conexões "desconhecidas".
 -   [x] **Comunicação em Tempo Real (WebSockets):**
     -   [x] Sistema de broadcast aprimorado para notificar diferentes tipos de clientes sobre eventos específicos (`SESSAO_ATUALIZADA`, `FORCE_DISCONNECT`, etc.).
+    -   [x] **Prevenção de Conexões Duplicadas:** O servidor agora impede de forma inteligente que o mesmo cliente ou gerente estabeleça múltiplas conexões, mantendo a lista de sessões limpa e precisa.
 
 ---
 
@@ -92,6 +97,7 @@ A estrutura do projeto foi organizada para separar claramente as responsabilidad
     │   ├── cliente-comum.js  # Script de WebSocket compartilhado
     │   ├── ... (HTML, CSS, JS das páginas do cliente)
     ├── Pagina gerencia/
+    │   ├── gerencia-core.js  # Script de WebSocket mestre da gerência
     │   └── ... (HTML, CSS, JS das páginas de gerência)
     └── Pagina_dev/
         ├── dev.html
