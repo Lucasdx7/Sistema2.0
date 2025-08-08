@@ -1,63 +1,152 @@
-// /Frontend/Pagina_dev/dev.js
+// /Frontend/Pagina_dev/dev.js (Versão com a ordem das funções corrigida)
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. Configuração Inicial e Autenticação ---
+    // ===================================================================
+    // --- SEÇÃO 1: CONFIGURAÇÃO INICIAL E AUTENTICAÇÃO ---
+    // ===================================================================
     const token = localStorage.getItem('token');
     if (!token) {
         window.location.href = '/dev-login';
         return;
     }
-
     const API_BASE_URL = '/api/dev';
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
 
-    // --- 2. Elementos do DOM ---
+    // ===================================================================
+    // --- SEÇÃO 2: ELEMENTOS DO DOM ---
+    // ===================================================================
     const userTableBody = document.getElementById('user-table-body');
     const sessionTableBody = document.getElementById('session-table-body');
     const sessionCount = document.getElementById('session-count');
     const wsStatus = document.getElementById('status-websocket');
+    const statusServer = document.getElementById('status-server');
+    const statusDb = document.getElementById('status-db');
+    const latencyApi = document.getElementById('latency-api');
+    const logContainer = document.getElementById('log-container');
+    const logFilter = document.getElementById('log-filter');
+    const logPauseBtn = document.getElementById('log-pause-btn');
+    const logClearBtn = document.getElementById('log-clear-btn');
+    const apiPerformanceBody = document.getElementById('api-performance-body');
 
-    // --- 3. Funções de Notificação ---
+    // ===================================================================
+    // --- SEÇÃO 3: ESTADO DA APLICAÇÃO E NOTIFICAÇÕES ---
+    // ===================================================================
     const showError = (message) => Swal.fire({ icon: 'error', title: 'Erro', text: message });
     const showSuccess = (message) => Swal.fire({ icon: 'success', title: 'Sucesso', text: message });
+    let isLogPaused = false;
+    let apiPerformanceData = {};
 
-    // --- 4. Lógica de Gerenciamento de Usuários ---
-    async function carregarUsuarios() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/usuarios`, { headers });
-            if (response.status >= 401) {
-                localStorage.removeItem('token');
-                await Swal.fire({ icon: 'warning', title: 'Sessão Expirada', text: 'Por favor, faça login novamente.' });
-                window.location.href = '/dev-login';
-                return;
-            }
-            if (!response.ok) throw new Error('Falha ao carregar usuários.');
-            
-            const usuarios = await response.json();
-            userTableBody.innerHTML = '';
-            usuarios.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.id}</td>
-                    <td>${user.nome}</td>
-                    <td>${user.email}</td>
-                    <td>${user.nivel_acesso}</td>
-                    <td><button class="action-btn change-password-btn" data-user-id="${user.id}" data-user-name="${user.nome}">Alterar Senha</button></td>
-                `;
-                userTableBody.appendChild(row);
-            });
-        } catch (error) {
-            showError(error.message);
+    // ===================================================================
+    // --- SEÇÃO 4: LÓGICA DE GERENCIAMENTO DE USUÁRIOS ---
+    // ===================================================================
+    // Encontre a função carregarUsuarios e atualize o `row.innerHTML`
+
+async function carregarUsuarios() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/usuarios`, { headers });
+        if (response.status >= 401) {
+            // ... (código de erro existente)
+            return;
         }
+        if (!response.ok) throw new Error('Falha ao carregar usuários.');
+        
+        const usuarios = await response.json();
+        userTableBody.innerHTML = '';
+        usuarios.forEach(user => {
+            const row = document.createElement('tr');
+            // ****** AQUI ESTÁ A MUDANÇA ******
+            // Adicionamos o botão "Editar" e passamos todos os dados do usuário via atributos data-*
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.nome}</td>
+                <td>${user.email}</td>
+                <td>${user.nivel_acesso}</td>
+                <td class="actions-cell">
+                    <button class="action-btn edit-user-btn" 
+                            data-user-id="${user.id}" 
+                            data-user-nome="${user.nome}" 
+                            data-user-email="${user.email}" 
+                            data-user-nivel="${user.nivel_acesso}"
+                            title="Editar Usuário">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="action-btn change-password-btn" 
+                            data-user-id="${user.id}" 
+                            data-user-name="${user.nome}"
+                            title="Alterar Senha">
+                        <i class="fas fa-key"></i> Senha
+                    </button>
+                </td>
+            `;
+            userTableBody.appendChild(row);
+        });
+    } catch (error) {
+        showError(error.message);
+    }
+}
+
+
+    // Encontre o eventListener da userTableBody e adicione a lógica para o 'edit-user-btn'
+
+userTableBody.addEventListener('click', async (event) => {
+    const changePasswordBtn = event.target.closest('.change-password-btn');
+    const editUserBtn = event.target.closest('.edit-user-btn'); // <<-- NOVA LINHA
+
+    // Lógica para alterar senha (existente)
+    if (changePasswordBtn) {
+        // ... (seu código para alterar senha continua aqui, sem alterações)
+        const { userId, userName } = changePasswordBtn.dataset;
+        // ... etc
     }
 
-    userTableBody.addEventListener('click', async (event) => {
-        const changePasswordBtn = event.target.closest('.change-password-btn');
-        if (!changePasswordBtn) return;
-        
+    // ****** AQUI ESTÁ A NOVA LÓGICA ******
+    // Lógica para editar o usuário
+    if (editUserBtn) {
+        const { userId, userNome, userEmail, userNivel } = editUserBtn.dataset;
+
+        const { value: formValues, isConfirmed } = await Swal.fire({
+            title: `Editando Usuário: ${userNome}`,
+            html: `
+                <input id="swal-input-nome" class="swal2-input" placeholder="Nome" value="${userNome}">
+                <input id="swal-input-email" class="swal2-input" placeholder="Email" value="${userEmail}">
+                <select id="swal-input-nivel" class="swal2-input">
+                    <option value="Pedidos" ${userNivel === 'Pedidos' ? 'selected' : ''}>Pedidos</option>
+                    <option value="Geral" ${userNivel === 'Geral' ? 'selected' : ''}>Geral</option>
+                    <option value="Dono" ${userNivel === 'Dono' ? 'selected' : ''}>Dono</option>
+                    <!-- Não inclua a opção 'dono' para evitar problemas de segurança -->
+                </select>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Salvar Alterações',
+            preConfirm: () => ({
+                nome: document.getElementById('swal-input-nome').value,
+                email: document.getElementById('swal-input-email').value,
+                nivel_acesso: document.getElementById('swal-input-nivel').value
+            })
+        });
+
+        if (isConfirmed && formValues) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/usuarios/${userId}`, {
+                    method: 'PUT',
+                    headers,
+                    body: JSON.stringify(formValues)
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message);
+                
+                showSuccess(result.message);
+                carregarUsuarios(); // Recarrega a lista para mostrar os dados atualizados
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+    } else if (changePasswordBtn) {
+        // ****** AQUI ESTÁ A LÓGICA RESTAURADA ******
         const { userId, userName } = changePasswordBtn.dataset;
 
         const { value: novaSenha } = await Swal.fire({
@@ -80,13 +169,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message);
                 showSuccess(result.message);
+                // Não precisa recarregar a lista aqui, pois a senha não é visível
             } catch (error) {
                 showError(error.message);
             }
         }
-    });
+    }
+});
 
-    // --- 5. Lógica de Gerenciamento de Sessões (WebSocket e Ações) ---
+
+    // ===================================================================
+    // --- SEÇÃO 5: LÓGICA DE GERENCIAMENTO DE SESSÕES (WebSocket e Ações) ---
+    // ===================================================================
+    
+    // ****** AQUI ESTÁ A CORREÇÃO DA ORDEM ******
+    // A função `conectarWebSocket` foi movida para DENTRO desta seção, junto com as outras funções de sessão.
     function conectarWebSocket() {
         const wsUrl = `ws://${window.location.host}?clientType=dev&page=dev-painel`;
         const ws = new WebSocket(wsUrl);
@@ -99,8 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            if (data.type === 'SESSIONS_UPDATE') {
-                renderSessions(data.payload);
+            switch (data.type) {
+                case 'SESSIONS_UPDATE':
+                    renderSessions(data.payload);
+                    break;
+                case 'SERVER_LOG':
+                    addLogEntry(data);
+                    break;
+                case 'API_PERFORMANCE':
+                    updateApiPerformance(data.payload);
+                    break;
             }
         };
 
@@ -129,8 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sessions.forEach(s => {
             const row = document.createElement('tr');
             let actionsHtml = '';
-
-            if (s.clientType === 'dev') {
+            if (s.clientType === 'dev' && s.page === 'dev-painel') {
                 actionsHtml = '<span>Painel Atual</span>';
             } else {
                 actionsHtml += `<button class="action-btn disconnect-btn" data-session-id="${s.id}" title="Forçar desconexão do WebSocket"><i class="fas fa-power-off"></i></button>`;
@@ -138,15 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     actionsHtml += `<button class="action-btn force-close-btn" data-session-id="${s.userId}" title="Finalizar a conta/sessão deste usuário"><i class="fas fa-store-slash"></i></button>`;
                 }
             }
-
-            row.innerHTML = `
-                <td>${s.id}</td>
-                <td>${s.clientType}</td>
-                <td>${s.page || 'N/A'}</td>
-                <td>${s.ip}</td>
-                <td>${new Date(s.connectedAt).toLocaleTimeString()}</td>
-                <td class="actions-cell">${actionsHtml}</td>
-            `;
+            row.innerHTML = `<td>${s.id}</td><td>${s.clientType}</td><td>${s.page || 'N/A'}</td><td>${s.ip}</td><td>${new Date(s.connectedAt).toLocaleTimeString()}</td><td class="actions-cell">${actionsHtml}</td>`;
             sessionTableBody.appendChild(row);
         });
     }
@@ -206,40 +302,82 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 6. Inicialização ---
+    // ===================================================================
+    // --- SEÇÃO 6: NOVAS FUNÇÕES (HEALTH CHECK, LOGS, PERFORMANCE) ---
+    // ===================================================================
+    async function performHealthCheck() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/health-check`, { headers });
+            if (!response.ok) throw new Error('Falha na verificação.');
+            const data = await response.json();
+            statusServer.textContent = data.server === 'online' ? 'Online' : 'Offline';
+            statusServer.className = `status-badge status-${data.server === 'online' ? 'online' : 'offline'}`;
+            statusDb.textContent = data.database === 'online' ? 'Online' : 'Offline';
+            statusDb.className = `status-badge status-${data.database === 'online' ? 'online' : 'offline'}`;
+            latencyApi.textContent = `${data.apiLatency} ms`;
+            latencyApi.className = `status-badge status-${data.apiLatency < 200 ? 'online' : 'warn'}`;
+        } catch (error) {
+            statusServer.textContent = 'Erro';
+            statusServer.className = 'status-badge status-offline';
+            statusDb.textContent = 'Erro';
+            statusDb.className = 'status-badge status-offline';
+        }
+    }
+
+    function addLogEntry({ level, message }) {
+        if (isLogPaused) return;
+        const logEntry = document.createElement('div');
+        logEntry.className = `log-entry log-${level.toLowerCase()}`;
+        logEntry.innerHTML = `<span class="log-timestamp">[${new Date().toLocaleTimeString()}]</span><span class="log-level">[${level}]</span><span class="log-message">${message}</span>`;
+        const shouldScroll = logContainer.scrollTop + logContainer.clientHeight >= logContainer.scrollHeight - 10;
+        logContainer.appendChild(logEntry);
+        if (shouldScroll) logContainer.scrollTop = logContainer.scrollHeight;
+        const filterText = logFilter.value.toLowerCase();
+        if (filterText && !logEntry.textContent.toLowerCase().includes(filterText)) {
+            logEntry.style.display = 'none';
+        }
+    }
+
+    function updateApiPerformance({ method, endpoint, statusCode, duration }) {
+        const key = `${method} ${endpoint}`;
+        if (!apiPerformanceData[key]) {
+            apiPerformanceData[key] = { calls: 0, totalDuration: 0, errors: 0, method, endpoint };
+        }
+        const entry = apiPerformanceData[key];
+        entry.calls++;
+        entry.totalDuration += duration;
+        if (statusCode >= 400) entry.errors++;
+        renderApiPerformance();
+    }
+
+    function renderApiPerformance() {
+        apiPerformanceBody.innerHTML = '';
+        Object.values(apiPerformanceData).sort((a, b) => b.calls - a.calls).forEach(entry => {
+            const avgDuration = (entry.totalDuration / entry.calls).toFixed(2);
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${entry.endpoint}</td><td>${entry.method}</td><td class="${avgDuration > 500 ? 'text-danger' : ''}">${avgDuration} ms</td><td>${entry.calls}</td><td>${entry.errors} (${((entry.errors / entry.calls) * 100).toFixed(1)}%)</td>`;
+            apiPerformanceBody.appendChild(row);
+        });
+    }
+
+    logPauseBtn.addEventListener('click', () => {
+        isLogPaused = !isLogPaused;
+        logPauseBtn.textContent = isLogPaused ? 'Continuar' : 'Pausar';
+        logContainer.classList.toggle('paused', isLogPaused);
+    });
+    logClearBtn.addEventListener('click', () => { logContainer.innerHTML = ''; });
+    logFilter.addEventListener('input', () => {
+        const filterText = logFilter.value.toLowerCase();
+        document.querySelectorAll('#log-container .log-entry').forEach(log => {
+            log.style.display = log.textContent.toLowerCase().includes(filterText) ? 'block' : 'none';
+        });
+    });
+
+    // ===================================================================
+    // --- SEÇÃO 7: INICIALIZAÇÃO ---
+    // ===================================================================
     carregarUsuarios();
     conectarWebSocket();
+    performHealthCheck();
+    setInterval(performHealthCheck, 30000);
 });
-
-
-
-//1. Health Check (Verificação de Saúde do Sistema)
-//Esta é a melhoria mais rápida e de maior impacto que podemos fazer.
-//O que é? Uma seção no topo do painel que mostra o status em tempo real dos componentes vitais do seu sistema.
-//Como seria?
-//Status do Servidor: Um indicador (verde/vermelho) mostrando se o servidor Node.js está online.
-//Status do Banco de Dados: Um indicador mostrando se a conexão com o MySQL está ativa.
-//Latência da API: Um número mostrando o tempo de resposta (em ms) de um endpoint básico da API, para medir a "saúde" e a velocidade da comunicação.
-//Por que é útil? Permite que você veja com um único olhar se o sistema está operando normalmente ou se há um problema crítico (ex: o banco de dados caiu) sem precisar olhar os logs do servidor.
-//2. Visualizador de Logs em Tempo Real (Aprimorado)
-//Atualmente, você tem um log de eventos do WebSocket. Podemos expandir isso para um visualizador de logs completo.
-//O que é? Uma seção que transmite todos os console.log importantes do seu servidor diretamente para o painel DEV.
-//Como seria?
-//Logs Coloridos: Usar cores diferentes para tipos de log ([INFO], [WARN], [ERROR]).
-//Filtro de Logs: Um campo de busca para filtrar os logs por palavras-chave (ex: "sessaoId: 21", "ERRO").
-//Botão de Pausar/Limpar: Para pausar o fluxo de logs e para limpar a tela.
-//Por que é útil? Você poderia depurar problemas de produção em tempo real sem precisar ter acesso direto ao terminal do servidor. Veria erros de SQL, falhas de login e outros eventos críticos instantaneamente.
-
-
-//5. Análise de Performance da API
-//Esta é uma melhoria mais avançada, mas extremamente poderosa.
-//O que é? Um dashboard que monitora a performance das suas rotas da API.
-//Como seria?
-//Um middleware no seu backend que mede o tempo de execução de cada rota da API.
-//Os dados (rota, tempo de execução, status code) seriam enviados para o painel DEV via WebSocket.
-//O painel exibiria uma tabela com:
-//Endpoint: (ex: POST /api/pedidos)
-//Média de Tempo: (ex: 45ms)
-//Total de Chamadas: (ex: 152)
-//Taxa de Erro: (ex: 2%)
-//Por que é útil? Ajuda a identificar gargalos de performance. Se você notar que a rota de relatórios está demorando muito (>500ms), saberá que precisa otimizar aquela query SQL.
