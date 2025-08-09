@@ -1,7 +1,11 @@
-// /Frontend/Pagina gerencia/login.js - CÓDIGO COMPLETO E CORRIGIDO
 
+// /Frontend/Pagina gerencia/login.js - CÓDIGO COMPLETO E CORRIGIDO
+// Script responsável pelo login e registro de novos gerentes na página de login da gerência.
+
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const loginForm = document.getElementById('login-form');
     const registerModal = document.getElementById('register-modal');
     const openModalBtn = document.getElementById('open-register-modal-btn');
@@ -9,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('register-form');
 
     // --- Lógica de Login com Notificações e Delay ---
+    // Adiciona listener para o formulário de login, faz requisição para autenticação e trata notificações
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -50,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // --- Lógica do Modal de Registro ---
+    // Adiciona listeners para abrir e fechar o modal de registro de novo gerente
     if (openModalBtn) {
         openModalBtn.addEventListener('click', () => {
             registerModal.classList.remove('hidden');
@@ -69,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Lógica de Registro com Notificações ---
+    // Adiciona listener para o formulário de registro, faz requisição para criar novo gerente e trata notificações
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();

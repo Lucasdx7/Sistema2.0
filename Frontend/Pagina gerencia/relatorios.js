@@ -1,3 +1,4 @@
+
 /**
  * ==================================================================
  * SCRIPT DA PÁGINA DE RELATÓRIOS (relatorios.html) - VERSÃO APRIMORADA
@@ -6,9 +7,12 @@
  * produtos mais vendidos e horários de pico.
  */
 
+// Aguarda o carregamento completo do DOM para iniciar o script
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const profileMenuBtn = document.getElementById('profile-menu-btn');
     const profileDropdown = document.getElementById('profile-dropdown');
     const logoutBtn = document.getElementById('logout-btn');
@@ -18,12 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCriarPdf = document.getElementById('btn-criar-pdf');
 
     // --- Elementos dos KPIs ---
+    // Seleciona os elementos dos indicadores de desempenho (KPIs)
     const kpiVendasTotais = document.getElementById('kpi-vendas-totais');
     const kpiTotalPedidos = document.getElementById('kpi-total-pedidos');
     const kpiTicketMedio = document.getElementById('kpi-ticket-medio');
     const kpiProdutoMaisVendido = document.getElementById('kpi-produto-mais-vendido'); // Novo KPI
 
     // --- Contextos dos Gráficos ---
+    // Seleciona os contextos dos gráficos para renderização com Chart.js
     const ctxVendas = document.getElementById('grafico-vendas-ano').getContext('2d');
     const ctxPagamentos = document.getElementById('grafico-metodos-pagamento').getContext('2d');
     const ctxProdutos = document.getElementById('grafico-produtos-vendidos').getContext('2d'); // Novo Gráfico
@@ -32,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let graficoVendas, graficoPagamentos, graficoProdutos, graficoHorarios; // Variáveis para instâncias dos gráficos
 
     // --- Verificação de Autenticação ---
+    // Verifica se o usuário está autenticado, caso contrário redireciona para o login
     const token = localStorage.getItem('authToken');
     const usuarioString = localStorage.getItem('usuario');
 
@@ -43,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const usuario = JSON.parse(usuarioString);
 
     // --- Funções ---
+    // Função para realizar logout do sistema
 
     function fazerLogout() {
         localStorage.removeItem('authToken');
@@ -51,8 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => window.location.href = '/login-gerencia', 1500);
     }
 
+    // Função utilitária para formatar valores monetários em Real
     const formatarMoeda = (valor) => (valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
+    // Atualiza os valores dos KPIs na tela
     function atualizarKPIs(dados) {
         kpiVendasTotais.textContent = formatarMoeda(dados.vendasTotais);
         kpiTotalPedidos.textContent = (dados.totalPedidos || 0).toString();
@@ -63,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Em relatorios.js
 
+// Renderiza o gráfico de vendas por período
 function renderizarGraficoVendas(dados) {
     if (graficoVendas) graficoVendas.destroy();
 
@@ -100,6 +111,7 @@ function renderizarGraficoVendas(dados) {
 }
 
 
+    // Renderiza o gráfico de métodos de pagamento
     function renderizarGraficoPagamentos(dados) {
         if (graficoPagamentos) graficoPagamentos.destroy();
         graficoPagamentos = new Chart(ctxPagamentos, {
@@ -121,6 +133,7 @@ function renderizarGraficoVendas(dados) {
 
     // --- NOVAS FUNÇÕES DE GRÁFICO ---
 
+    // Renderiza o gráfico de produtos mais vendidos
     function renderizarGraficoProdutos(dados) {
         if (graficoProdutos) graficoProdutos.destroy();
         graficoProdutos = new Chart(ctxProdutos, {
@@ -144,6 +157,7 @@ function renderizarGraficoVendas(dados) {
         });
     }
 
+    // Renderiza o gráfico de horários de pico de pedidos
     function renderizarGraficoHorarios(dados) {
         if (graficoHorarios) graficoHorarios.destroy();
         graficoHorarios = new Chart(ctxHorarios, {
@@ -168,6 +182,7 @@ function renderizarGraficoVendas(dados) {
     }
 
    // ...
+// Carrega os dados dos relatórios do backend e atualiza KPIs e gráficos
 async function carregarRelatorios() {
     const periodo = filtroPeriodo.value;
     try {
@@ -209,6 +224,7 @@ async function carregarRelatorios() {
 // ...
 
 
+    // Gera um PDF do relatório exibido na tela usando html2canvas e jsPDF
     async function gerarPDF() {
         const { jsPDF } = window.jspdf;
         const elementoParaCapturar = document.getElementById('relatorio-para-pdf');
@@ -240,6 +256,7 @@ async function carregarRelatorios() {
         }
     }
 
+    // Conecta ao WebSocket para receber notificações em tempo real (ex: chamado de garçom)
     function conectarWebSocket() {
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${wsProtocol}//${window.location.host}`;
@@ -277,6 +294,7 @@ async function carregarRelatorios() {
     }
 
     // --- Event Listeners ---
+    // Adiciona os listeners para menus, logout, filtro de período e botão de PDF
     if (dropdownUserName) dropdownUserName.textContent = usuario.nome;
     if (dropdownUserRole) dropdownUserRole.textContent = usuario.nivel_acesso;
 
@@ -298,6 +316,7 @@ async function carregarRelatorios() {
     btnCriarPdf.addEventListener('click', gerarPDF);
 
     // --- Inicialização ---
+    // Carrega os relatórios e conecta ao WebSocket ao iniciar a página
     carregarRelatorios();
     conectarWebSocket();
 });

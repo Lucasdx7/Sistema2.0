@@ -1,12 +1,16 @@
+
 /**
  * ==================================================================
  * SCRIPT DA PÁGINA DE LOGS DO SISTEMA (logs.html) - VERSÃO FINAL
  * Com filtros de data e termo de busca.
  * ==================================================================
+ * Controla a exibição dos logs do sistema, com filtros e atualização em tempo real.
  */
 
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const logsTableBody = document.querySelector('#logs-table tbody');
     const profileMenuBtn = document.getElementById('profile-menu-btn');
     const profileDropdown = document.getElementById('profile-dropdown');
@@ -15,12 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownUserRole = document.getElementById('dropdown-user-role');
 
     // --- Elementos dos Filtros ---
+    // Seleciona os elementos dos filtros de data e termo de busca
     const filtroDataInput = document.getElementById('filtro-data');
     const filtroTermoInput = document.getElementById('filtro-termo');
     const btnAplicarFiltros = document.getElementById('btn-aplicar-filtros');
     const btnLimparFiltros = document.getElementById('btn-limpar-filtros');
 
     // --- Verificação de Autenticação ---
+    // Verifica se o usuário está autenticado, caso contrário redireciona para o login
     const token = localStorage.getItem('authToken');
     const usuarioString = localStorage.getItem('usuario');
 
@@ -33,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     // --- Funções ---
+    // Função para realizar logout do sistema
 
     function fazerLogout() {
         localStorage.clear();
@@ -41,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Busca os logs da API com base nos filtros e os renderiza na tabela.
+     * Faz requisição para a API, processa os dados e exibe os logs na tabela.
      */
     async function carregarLogs() {
     const data = filtroDataInput.value;
@@ -88,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Limpa os filtros e recarrega todos os logs
     function limparFiltros() {
         filtroDataInput.value = '';
         filtroTermoInput.value = '';
@@ -95,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners ---
+    // Adiciona os listeners para filtros, busca, menu de perfil e logout
     btnAplicarFiltros.addEventListener('click', carregarLogs);
     btnLimparFiltros.addEventListener('click', limparFiltros);
     // Permite buscar pressionando Enter no campo de texto
@@ -119,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirmado) fazerLogout();
     });
 
+    // Conecta ao WebSocket para receber notificações em tempo real (ex: chamado de garçom, novos pedidos)
     function conectarWebSocket(usuario) {
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${wsProtocol}//${window.location.host}`;
@@ -162,5 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
     // --- Inicialização ---
+    // Carrega os logs ao iniciar a página
     carregarLogs(); // Carga inicial sem filtros
 });

@@ -1,4 +1,7 @@
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const formSuporte = document.getElementById('form-suporte');
     const nomeInput = document.getElementById('nome');
     const telefoneInput = document.getElementById('telefone');
@@ -10,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownUserName = document.getElementById('dropdown-user-name');
     const dropdownUserRole = document.getElementById('dropdown-user-role');
 
+    // --- Autenticação ---
+    // Verifica se o usuário está autenticado, caso contrário redireciona para o login
     const token = localStorage.getItem('authToken');
     const usuarioString = localStorage.getItem('usuario');
 
@@ -21,11 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const usuario = JSON.parse(usuarioString);
 
+    // Função para realizar logout do sistema
     function fazerLogout() {
         localStorage.clear();
         window.location.href = '/login-gerencia';
     }
 
+    // Preenche os campos do formulário com os dados do usuário logado
     function preencherDadosUsuario() {
         if (dropdownUserName) dropdownUserName.textContent = usuario.nome;
         if (dropdownUserRole) dropdownUserRole.textContent = usuario.nivel_acesso;
@@ -34,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Função para enviar o chamado de suporte para a API
     async function enviarChamado(event) {
         event.preventDefault();
 
@@ -85,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // Conecta ao WebSocket para receber notificações em tempo real (ex: chamado de garçom)
     function conectarWebSocket() {
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${wsProtocol}//${window.location.host}`;
@@ -121,6 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // --- Event Listeners ---
+    // Adiciona listeners para envio do formulário, menu de perfil, logout e inicialização
     formSuporte.addEventListener('submit', enviarChamado);
 
     profileMenuBtn.addEventListener('click', () => profileDropdown.classList.toggle('hidden'));
@@ -134,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const confirmado = await Notificacao.confirmar('Sair do Sistema', 'Deseja mesmo sair?');
         if (confirmado) fazerLogout();
     });
+    // Inicializa a conexão WebSocket e preenche os dados do usuário ao carregar a página
     conectarWebSocket();
     preencherDadosUsuario();
 });

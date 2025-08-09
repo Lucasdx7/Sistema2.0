@@ -1,3 +1,4 @@
+
 /**
  * ==================================================================
  * SCRIPT DA PÁGINA DE GERENCIAMENTO DE MESAS (gerencia_mesas.html)
@@ -5,8 +6,11 @@
  * Controla a visualização, adição e gerenciamento de mesas, suas sessões,
  * e a geração de recibos detalhados.
  */
+
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const profileMenuBtn = document.getElementById('profile-menu-btn');
     const profileDropdown = document.getElementById('profile-dropdown');
     const logoutBtn = document.getElementById('logout-btn');
@@ -26,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailsModalTitulo = document.getElementById('details-modal-titulo');
 
     // --- Autenticação ---
+    // Verifica se o usuário está autenticado, caso contrário redireciona para o login
     const token = localStorage.getItem('authToken');
     const usuarioString = localStorage.getItem('usuario');
 
@@ -37,10 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const usuario = JSON.parse(usuarioString);
 
     // --- Variáveis de Estado ---
+    // Variáveis para armazenar o ID da mesa e sessão selecionadas
     let selectedMesaId = null;
     let currentSessaoId = null;
 
     // --- Funções ---
+    // Função para realizar logout do sistema
 
     function fazerLogout() {
         localStorage.removeItem('authToken');
@@ -49,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => window.location.href = '/login-gerencia', 1500);
     }
 
+    // Função para carregar todas as mesas cadastradas e exibi-las na lista
     async function carregarMesas() {
         try {
             const response = await fetch('/api/mesas', { headers: { 'Authorization': `Bearer ${token}` } });
@@ -72,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Função para carregar o histórico de sessões de uma mesa específica
     async function carregarDetalhesMesa(mesaId, mesaNome) {
         selectedMesaId = mesaId;
         detalhesTitulo.textContent = `Detalhes da ${mesaNome}`;
@@ -142,6 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Função para abrir o modal de edição de pedidos de uma sessão específica
     async function abrirModalDeEdicao(sessaoId) {
         currentSessaoId = sessaoId;
         editModalTitulo.textContent = `Editando Pedidos (Sessão #${sessaoId})`;
@@ -202,7 +212,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================================
     // --- NOVA FUNÇÃO CRIADA PARA ABRIR O MODAL DE DETALHES ---
     // ==================================================================
-   async function abrirModalDeDetalhes(sessaoId) {
+    // Função para abrir o modal de detalhes da conta de uma sessão específica
+    async function abrirModalDeDetalhes(sessaoId) {
     currentSessaoId = sessaoId;
     detailsModalTitulo.textContent = `Detalhes da Conta (Sessão #${sessaoId})`;
     detailsModalBody.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> Carregando detalhes da conta...</p>';
@@ -274,8 +285,9 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 
+    // Função para gerar o HTML do recibo de uma sessão
     function generateReceiptHtml(conta, sessaoInfo, sessaoId) {
-        const header = `<div class="receipt-header"><h1>Skina 67</h1><p>Rua da Esquina, 123 - Centro</p><p>Telefone: (99) 99999-9999</p><p>CNPJ: 12.345.678/0001-99</p></div>`;
+    const header = `<div class="receipt-header"><h1>Restaurante</h1><p>Rua da Esquina, 123 - Centro</p><p>Telefone: (99) 99999-9999</p><p>CNPJ: 12.345.678/0001-99</p></div>`;
         const dataHora = new Date().toLocaleString('pt-BR');
         const sessionDetails = `<div class="receipt-info"><p><strong>Data:</strong> ${dataHora}</p><p><strong>Sessão:</strong> #${sessaoId} / <strong>Mesa:</strong> ${sessaoInfo.nome_usuario}</p><p><strong>Cliente:</strong> ${sessaoInfo.nome_cliente || 'Não informado'}</p><p><strong>Telefone:</strong> ${sessaoInfo.telefone_cliente || 'Não informado'}</p><p><strong>CPF:</strong> ${sessaoInfo.cpf_cliente || 'Não informado'}</p></div>`;
         let itensHtml = '<div class="receipt-items-header"><span>Qtd. Descrição</span><span>Valor</span></div>';
@@ -299,10 +311,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return `<div class="receipt-wrapper">${header}${sessionDetails}${itemsSection}<hr class="dashed">${summary}<hr class="dashed">${paymentMethodHtml}${footer}</div>`;
     }
 
+    // Função para gerar o CSS do recibo impresso
     function generateReceiptCss() {
         return `@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap' );*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Fira Code',monospace;color:#000;background-color:#fff;width:80mm;font-size:10pt}.receipt-wrapper{padding:5mm}.receipt-header,.receipt-footer,.receipt-payment{text-align:center}.receipt-header h1{font-size:1.4em;margin-bottom:5px}.receipt-header p,.receipt-footer p,.receipt-info p{font-size:.9em;margin-bottom:2px}hr.dashed{border:none;border-top:1px dashed #000;margin:8px 0}.receipt-items-header,.receipt-item,.summary-item{display:flex;justify-content:space-between;font-size:.9em}.receipt-items-header{font-weight:600;border-bottom:1px dashed #000;margin-bottom:5px;padding-bottom:5px}.receipt-item{margin-bottom:3px}.summary-item{margin:4px 0}.summary-item.total{font-weight:600;font-size:1.1em;border-top:1px dashed #000;padding-top:5px;margin-top:8px}@media print{@page{margin:0;size:80mm auto}body{margin:0}}`;
     }
 
+    // Função para conectar ao WebSocket e escutar eventos em tempo real (chamados e atualizações de sessão)
     function conectarWebSocket() {
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${wsProtocol}//${window.location.host}`;
@@ -340,6 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
     // --- Event Listeners ---
+    // Adiciona os listeners para menus, logout, formulário de adicionar mesa, seleção e exclusão de mesas, etc.
 
     if (dropdownUserName) dropdownUserName.textContent = usuario.nome;
     if (dropdownUserRole) dropdownUserRole.textContent = usuario.nivel_acesso;
@@ -347,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (e) => { if (!profileMenuBtn.contains(e.target) && !profileDropdown.contains(e.target)) profileDropdown.classList.add('hidden'); });
     logoutBtn.addEventListener('click', async (e) => { e.preventDefault(); const confirmado = await Notificacao.confirmar('Sair do Sistema', 'Deseja mesmo sair?'); if (confirmado) fazerLogout(); });
 
+    // Listener para adicionar uma nova mesa ao enviar o formulário
     formAddMesa.addEventListener('submit', async (e) => {
         e.preventDefault();
         const nome = document.getElementById('nome-mesa-input').value.trim();
@@ -363,6 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Listener para seleção e exclusão de mesas na lista
     listaMesas.addEventListener('click', async (e) => {
         const itemMesa = e.target.closest('.mesa-list-item');
         if (e.target.closest('.delete-btn')) {
@@ -392,6 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================================
     // --- EVENT LISTENER CORRIGIDO PARA AMBOS OS BOTÕES ---
     // ==================================================================
+    // Listener para abrir modais de edição ou detalhes ao clicar nos botões das sessões
     detalhesConteudo.addEventListener('click', async (e) => {
         const button = e.target.closest('button.action-btn');
         if (!button) return;
@@ -411,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ...
 
 
+    // Listener para cancelar itens de pedidos dentro do modal de edição
     editModalBody.addEventListener('click', async (e) => {
         const cancelButton = e.target.closest('.cancel-item-btn');
         if (!cancelButton) return;
@@ -473,6 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+    // Listener para gerar e imprimir recibo ao clicar no botão dentro do modal de detalhes
     detailsModalBody.addEventListener('click', async (e) => {
         const printButton = e.target.closest('#print-receipt-btn');
         if (!printButton || printButton.disabled) return;
@@ -535,12 +555,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
+    // Listeners para fechar os modais ao clicar fora ou no botão de fechar
     editModal.addEventListener('click', (e) => { if (e.target === editModal) editModal.classList.add('hidden'); });
     editModalCloseBtn.addEventListener('click', () => editModal.classList.add('hidden'));
     detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) detailsModal.classList.add('hidden'); });
     detailsModalCloseBtn.addEventListener('click', () => detailsModal.classList.add('hidden'));
 
     // --- Inicialização ---
+    // Carrega as mesas e conecta ao WebSocket ao iniciar a página
     carregarMesas();
     conectarWebSocket();
 });

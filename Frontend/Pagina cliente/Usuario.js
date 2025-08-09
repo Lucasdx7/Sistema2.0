@@ -1,13 +1,16 @@
+
 /**
  * ==================================================================
  * SCRIPT PRINCIPAL DA PÁGINA DO CARDÁPIO DO CLIENTE (Paginausuario.html)
  * VERSÃO FINAL E COM DEPURAÇÃO
  * ==================================================================
+ * Controla a renderização do cardápio, carrinho, pedidos e personalização de fonte para o cliente.
  */
 
 /**
  * Aplica uma família de fontes ao corpo do documento e loga a ação.
  * @param {string} fontFamily - A string da família de fontes (ex: "'Poppins', sans-serif").
+ * Altera a fonte global da interface do cliente.
  */
 function aplicarFonteGlobal(fontFamily) {
     console.log(`[FONTE] Aplicando a fonte "${fontFamily}" ao CSS.`);
@@ -16,6 +19,7 @@ function aplicarFonteGlobal(fontFamily) {
 
 /**
  * Busca a configuração de fonte da API e a aplica na página.
+ * Requisição para API pública para personalização visual.
  */
 async function carregarEaplicarFonte() {
     try {
@@ -44,8 +48,10 @@ async function carregarEaplicarFonte() {
 }
 
 
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // --- Bloco de autenticação inicial ---
+    // Verifica se o cliente está autenticado, caso contrário redireciona para o login
     const token = localStorage.getItem('token');
     const sessaoId = localStorage.getItem('sessaoId');
 
@@ -56,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Constantes e Variáveis de Estado ---
+    // Define URLs base e inicializa o carrinho do cliente
     const API_URL = '/api';
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     let cardapioCompleto = [];

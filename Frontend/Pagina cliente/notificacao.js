@@ -1,18 +1,20 @@
+
 /**
  * ==================================================================
  * MÓDULO DE NOTIFICAÇÕES GLOBAIS (usando SweetAlert2)
  * VERSÃO PARA A PÁGINA DO CLIENTE
  * ==================================================================
- * Este arquivo centraliza a criação de notificações, com um estilo
- * que combina com a interface do cliente (tons claros e sóbrios).
+ * Centraliza a criação de notificações para o cliente, com estilo visual próprio.
  */
 
+// Objeto global com métodos para exibir diferentes tipos de notificações no frontend do cliente
 const Notificacao = {
 
     /**
      * Exibe uma notificação de SUCESSO no estilo "toast".
      * Ideal para feedbacks rápidos como "Item adicionado ao carrinho".
      * @param {string} titulo - A mensagem de sucesso a ser exibida.
+     * Usa SweetAlert2 para mostrar um toast no topo da tela.
      */
     sucesso(titulo) {
         Swal.fire({
@@ -37,6 +39,7 @@ const Notificacao = {
      * Exibe uma notificação de ERRO em formato de modal.
      * @param {string} titulo - O título principal do erro.
      * @param {string} [texto=''] - Um texto adicional com mais detalhes.
+     * Usa SweetAlert2 para mostrar um modal de erro.
      */
     erro(titulo, texto = '') {
         Swal.fire({
@@ -55,6 +58,7 @@ const Notificacao = {
      * @param {string} titulo - A pergunta principal (ex: 'Remover item?').
      * @param {string} texto - Um texto de aviso sobre a ação.
      * @returns {Promise<boolean>} - Retorna true se o usuário confirmar, false caso contrário.
+     * Usa SweetAlert2 para mostrar um modal de confirmação.
      */
     async confirmar(titulo, texto) {
         const resultado = await Swal.fire({

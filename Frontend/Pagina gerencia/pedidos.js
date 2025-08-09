@@ -2,15 +2,20 @@
  * ==================================================================
  * SCRIPT DA PÁGINA DE ACOMPANHAMENTO DE PEDIDOS (VERSÃO 3.0)
  * ==================================================================
+ * Controla a exibição, atualização e confirmação de entrega dos pedidos em tempo real.
  */
+
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM ---
+    // Seleciona os elementos principais da página para manipulação posterior
     const pedidosContainer = document.getElementById('pedidos-container');
     const msgSemPedidos = document.getElementById('mensagem-sem-pedidos');
     const token = localStorage.getItem('authToken');
     const usuario = JSON.parse(localStorage.getItem('usuario'));
 
     // --- Verificação de Autenticação ---
+    // Verifica se o usuário está autenticado, caso contrário redireciona para o login
     if (!token || !usuario) {
         Notificacao.erro('Acesso Negado', 'Você precisa estar logado para acessar esta página.')
             .then(() => window.location.href = '/login-gerencia');
@@ -20,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Renderiza um único card de pedido/sessão na tela.
      * @param {object} sessao - O objeto da sessão ativa.
+     * Cria o HTML do card de cada pedido/sessão e adiciona ao container.
      */
     function renderizarCardPedido(sessao) {
         const totalFormatado = sessao.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -83,17 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Busca os pedidos/sessões ativos da API e os renderiza na tela.
+     * Faz requisição para a API, processa os dados e exibe os cards de pedidos.
      */
-    /**
- * Busca os pedidos/sessões ativos da API e os renderiza na tela.
- */
-/**
- * Busca os pedidos/sessões ativos da API e os renderiza na tela.
- */
-// SUBSTITUA A FUNÇÃO INTEIRA NO SEU ARQUIVO pedidos.js
-
-// Versão de depuração para o pedidos.js
-async function carregarPedidosAtivos() {
+    async function carregarPedidosAtivos() {
     console.log("1. Iniciando carregarPedidosAtivos...");
     const msgSemSessoes = document.getElementById('mensagem-sem-sessoes');
     const pedidosContainer = document.getElementById('pedidos-container');
@@ -142,6 +140,7 @@ async function carregarPedidosAtivos() {
 
     /**
      * Lida com o clique no botão "Confirmar Entrega".
+     * Marca o item como entregue na API e atualiza a interface.
      * @param {Event} e - O evento de clique.
      */
     async function handleMarcarComoEntregue(e) {
@@ -177,6 +176,7 @@ async function carregarPedidosAtivos() {
 
     /**
      * Conecta ao WebSocket para receber atualizações em tempo real.
+     * Atualiza a lista de pedidos automaticamente ao receber eventos do servidor.
      */
     // /Frontend/Pagina gerencia/pedidos.js
 
@@ -236,11 +236,13 @@ function conectarWebSocket() {
     
 
     // --- Inicialização e Event Listeners ---
+    // Carrega os pedidos ativos, conecta ao WebSocket e adiciona listeners de interação
     carregarPedidosAtivos();
     conectarWebSocket();
     pedidosContainer.addEventListener('click', handleMarcarComoEntregue);
 
-    // --- Lógica do Menu de Perfil (simplificada para o exemplo) ---
+    // --- Lógica do Menu de Perfil ---
+    // Atualiza informações do usuário e adiciona listeners ao menu de perfil e logout
     const profileMenuBtn = document.getElementById('profile-menu-btn');
     const profileDropdown = document.getElementById('profile-dropdown');
     document.getElementById('dropdown-user-name').textContent = usuario.nome;

@@ -1,14 +1,18 @@
+
 /**
  * ==================================================================
  * SCRIPT DA PÁGINA DE CHAMADOS DE GARÇOM (chamados.html)
  * ==================================================================
  * Controla a exibição e gerenciamento dos chamados em tempo real,
  * incluindo a funcionalidade de limpar chamados atendidos.
+ * Exibe, marca como atendido e remove chamados, além de integrar com WebSocket para atualizações em tempo real.
  */
 
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const chamadosGrid = document.getElementById('chamados-grid');
     const profileMenuBtn = document.getElementById('profile-menu-btn');
     const profileDropdown = document.getElementById('profile-dropdown');
@@ -18,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const limparChamadosBtn = document.getElementById('limpar-chamados-btn');
 
     // --- Autenticação ---
+    // Verifica se o usuário está autenticado, caso contrário redireciona para o login
     const token = localStorage.getItem('authToken');
     const usuarioString = localStorage.getItem('usuario');
 
@@ -29,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const usuario = JSON.parse(usuarioString);
 
     // --- Funções ---
+    // Função para realizar logout do sistema
 
     function fazerLogout() {
         localStorage.removeItem('authToken');
@@ -42,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {object} chamado - O objeto do chamado com id, nome_mesa, data_hora, status.
      * @returns {string} - O HTML do card.
      */
+    // Cria o HTML para um único card de chamado
     function criarCardChamado(chamado) {
         const data = new Date(chamado.data_hora);
         const horarioFormatado = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -69,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Busca os chamados da API e renderiza na tela.
      */
+    // Busca os chamados da API e renderiza na tela
     async function carregarChamados() {
         try {
             const response = await fetch('/api/chamados', {
@@ -108,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} chamadoId - O ID do chamado a ser atualizado.
      */
     // ...
+// Marca um chamado como atendido e atualiza o card na tela
 async function atenderChamado(chamadoId) {
     try {
         const response = await fetch(`/api/chamados/${chamadoId}/atender`, {
@@ -154,6 +163,7 @@ async function atenderChamado(chamadoId) {
     /**
      * Limpa todos os chamados que já foram atendidos.
      */
+    // Limpa todos os chamados que já foram atendidos
     async function limparChamadosAtendidos() {
         limparChamadosBtn.disabled = true;
         limparChamadosBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Limpando...';
@@ -184,6 +194,7 @@ async function atenderChamado(chamadoId) {
     /**
      * Conecta ao WebSocket para receber novos chamados em tempo real.
      */
+    // Conecta ao WebSocket para receber novos chamados em tempo real
     function conectarWebSocket() {
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${wsProtocol}//${window.location.host}`;
@@ -207,6 +218,7 @@ async function atenderChamado(chamadoId) {
     }
 
     // --- Event Listeners ---
+    // Adiciona listeners para menu de perfil, logout, botões de ação e inicialização
     if (dropdownUserName) dropdownUserName.textContent = usuario.nome;
     if (dropdownUserRole) dropdownUserRole.textContent = usuario.nivel_acesso;
 
@@ -250,6 +262,7 @@ async function atenderChamado(chamadoId) {
     });
     
     // --- Inicialização ---
+    // Carrega os chamados e conecta ao WebSocket ao iniciar a página
     carregarChamados();
     conectarWebSocket();
 });

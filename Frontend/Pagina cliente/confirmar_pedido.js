@@ -63,12 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================================
     // LÓGICA DO TECLADO VIRTUAL
     // ==================================================================
+    // Gerencia exibição e funcionamento do teclado virtual alfanumérico para observações
     const keyboard = document.getElementById('virtual-keyboard-alphanumeric');
     const keyboardInput = document.getElementById('modal-textarea');
     const shiftKey = document.getElementById('shift-key');
     const alphaKeys = keyboard.querySelectorAll('.keyboard-key[data-key]');
     let isShiftActive = false;
 
+    // Exibe o teclado virtual ao clicar no campo de observação
     const showKeyboard = () => {
         const keyboardLabel = keyboard.querySelector('#keyboard-target-label');
         const productName = document.getElementById('modal-product-name').textContent;
@@ -78,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('keyboard-active');
     };
 
+    // Esconde o teclado virtual
     const hideKeyboard = () => {
         if (!keyboard.classList.contains('visible')) return;
         keyboard.classList.remove('visible');
@@ -85,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('keyboard-active');
     };
 
+    // Alterna o estado do shift (maiúsculo/minúsculo)
     const toggleShift = () => {
         isShiftActive = !isShiftActive;
         shiftKey.classList.toggle('active', isShiftActive);
@@ -96,8 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Mostra teclado ao clicar no campo de observação
     keyboardInput.addEventListener('click', (e) => { e.stopPropagation(); showKeyboard(); });
 
+    // Lida com os cliques nas teclas do teclado virtual
     keyboard.addEventListener('click', (e) => {
         const target = e.target.closest('.keyboard-key');
         if (!target) return;
@@ -114,11 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (target.id === 'backspace-key') keyboardInput.value = keyboardInput.value.slice(0, -1);
         else if (target.id === 'confirm-key') hideKeyboard();
     });
+    // Fecha teclado ao clicar no botão de fechar
     keyboard.querySelector('.keyboard-close-btn').addEventListener('click', hideKeyboard);
     // ==================================================================
     // FIM DO TECLADO VIRTUAL
     // ==================================================================
 
+    // Agrupa itens iguais do carrinho (mesmo produto e observação)
     function agruparItensDoCarrinho(carrinhoBruto) {
         if (!carrinhoBruto || carrinhoBruto.length === 0) return [];
         const itensAgrupados = {};
@@ -133,12 +141,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return Object.values(itensAgrupados);
     }
 
+    // Atualiza o carrinho no localStorage e redesenha a página se necessário
     function atualizarCarrinho(novoCarrinho, redesenhar = true) {
         carrinho = novoCarrinho;
         localStorage.setItem('carrinho', JSON.stringify(carrinho));
         if (redesenhar) renderizarPagina();
     }
 
+    // Renderiza a lista de itens do carrinho na página, calcula subtotal e atualiza UI
     function renderizarPagina() {
         const itensAgrupados = agruparItensDoCarrinho(carrinho);
         listaResumo.innerHTML = '';
@@ -188,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cartBadge.style.display = carrinho.length > 0 ? 'flex' : 'none';
     }
 
+    // Abre o modal para adicionar/editar observação de um item do carrinho
     function abrirModalObservacao(produtoId, obsAtual) {
         const itemOriginal = carrinho.find(p => p.id == produtoId);
         if (!itemOriginal) return;
@@ -198,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observationModal.classList.remove('hidden');
     }
 
+    // Fecha o modal de observação e reseta variáveis relacionadas
     function fecharModalObservacao() {
         hideKeyboard();
         observationModal.classList.add('hidden');
@@ -205,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observacaoOriginalParaEdicao = '';
     }
 
+    // Salva a observação editada/adicionada ao item do carrinho
     function salvarObservacao() {
         if (!produtoIdParaObservacao) return;
         const novaObservacao = modalTextarea.value.trim();
@@ -218,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fecharModalObservacao();
     }
 
+    // Lida com eventos de clique nos itens do carrinho (aumentar, diminuir, remover, editar observação)
     listaResumo.addEventListener('click', async (e) => {
         const itemLi = e.target.closest('.order-item');
         if (!itemLi) return;
@@ -244,10 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Eventos do modal de observação
     modalSaveBtn.addEventListener('click', salvarObservacao);
     modalCancelBtn.addEventListener('click', fecharModalObservacao);
     observationModal.addEventListener('click', (e) => { if (e.target === observationModal) fecharModalObservacao(); });
 
+    // Carrega sugestões de produtos do backend e exibe na interface
     async function carregarSugestao() {
         try {
             const response = await fetch('/api/produtos/sugestao', { headers: { 'Authorization': `Bearer ${token}` } });
@@ -291,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Envia o pedido para o backend após confirmação do usuário
     async function confirmarPedido() {
         const confirmado = await Notificacao.confirmar('Confirmar Pedido', 'Seu pedido será enviado para a cozinha. Deseja continuar?');
         if (!confirmado) return;
@@ -327,11 +344,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners ---
+    // Eventos de navegação e confirmação
     voltarBtn.addEventListener('click', () => window.location.href = '/cardapio');
     confirmarBtn.addEventListener('click', confirmarPedido);
     profileIcon.addEventListener('click', () => window.location.href = '/conta');
 
-    // <-- ALTERAÇÃO 2: Adicionado o evento de clique para o ícone "Sobre"
+    // Evento para o ícone "Sobre"
     if (aboutIcon) {
         aboutIcon.addEventListener('click', () => {
             window.location.href = '/sobre';
@@ -340,6 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
    // /Frontend/Pagina cliente/seu_arquivo.js
 
+// Conecta ao WebSocket para receber atualizações em tempo real (ex: aparência, desconexão)
 function conectarWebSocket() {
     // 1. Pega o ID da sessão do localStorage. Se não existir, não tenta conectar.
     const sessaoId = localStorage.getItem('sessaoId');
@@ -357,13 +376,13 @@ function conectarWebSocket() {
     console.log(`[WSS] Tentando conectar a: ${wsUrl}`);
     const socket = new WebSocket(wsUrl);
 
-    // 4. Lógica de tratamento de mensagens (incluindo a sua lógica original).
+    // 4. Lógica de tratamento de mensagens recebidas do servidor
     socket.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data);
             console.log('[WSS] Mensagem recebida:', data);
 
-            // Sua lógica original para atualizar a fonte
+            // Atualiza fonte do sistema se receber configuração nova
             if (data.type === 'CONFIG_ATUALIZADA' && data.payload && data.payload.fonte_cliente) {
                 Notificacao.info('A aparência foi atualizada!');
                 aplicarFonteGlobal(data.payload.fonte_cliente);
@@ -383,7 +402,7 @@ function conectarWebSocket() {
         }
     };
 
-    // 5. Lógica de reconexão.
+    // 5. Lógica de reconexão automática em caso de queda
     socket.onclose = () => {
         console.log('[WSS] Conexão fechada. Tentando reconectar em 5 segundos...');
         setTimeout(conectarWebSocket, 5000);
@@ -397,6 +416,7 @@ function conectarWebSocket() {
 
 
     // --- INICIALIZAÇÃO ---
+    // Carrega fonte personalizada, renderiza carrinho, carrega sugestão e conecta WebSocket
     carregarEaplicarFonte();
     renderizarPagina();
     carregarSugestao();

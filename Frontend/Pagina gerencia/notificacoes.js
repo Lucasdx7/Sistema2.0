@@ -1,17 +1,21 @@
+
 /**
  * ==================================================================
  * MÓDULO DE NOTIFICAÇÕES GLOBAIS (usando SweetAlert2)
  * ==================================================================
  * Este arquivo centraliza a criação de notificações para todo o sistema,
  * garantindo um visual consistente e facilitando a manutenção.
+ * Fornece funções utilitárias para exibir mensagens de sucesso, erro, confirmação, carregamento e ações de risco.
  */
 
+// Objeto global com métodos para exibir diferentes tipos de notificações no sistema
 const Notificacao = {
 
     /**
      * Exibe uma notificação de SUCESSO no estilo "toast" (canto da tela).
      * Ideal para feedbacks rápidos que não exigem interação.
      * @param {string} titulo - A mensagem de sucesso a ser exibida.
+     * Usa SweetAlert2 para mostrar um toast no topo da tela.
      */
     sucesso(titulo) {
         Swal.fire({
@@ -36,6 +40,7 @@ const Notificacao = {
      * Ideal para erros que o usuário precisa ver e confirmar.
      * @param {string} titulo - O título principal do erro (ex: 'Operação Falhou').
      * @param {string} [texto=''] - Um texto adicional com mais detalhes sobre o erro.
+     * Usa SweetAlert2 para mostrar um modal de erro.
      */
     erro(titulo, texto = '') {
         Swal.fire({
@@ -54,6 +59,7 @@ const Notificacao = {
      * @param {string} titulo - A pergunta principal (ex: 'Tem certeza?').
      * @param {string} texto - Um texto de aviso sobre as consequências da ação.
      * @returns {Promise<boolean>} - Retorna uma promessa que resolve para `true` se o usuário confirmar, e `false` caso contrário.
+     * Usa SweetAlert2 para mostrar um modal de confirmação.
      */
     async confirmar(titulo, texto) {
         const resultado = await Swal.fire({
@@ -75,6 +81,7 @@ const Notificacao = {
      * Mostra um pop-up de carregamento sem botões.
      * Ideal para aguardar respostas do servidor.
      * @param {string} titulo - O título a ser exibido no pop-up (ex: 'Carregando...').
+     * Usa SweetAlert2 para mostrar um modal de carregamento.
      */
     mostrarCarregando(titulo) {
         Swal.fire({
@@ -95,6 +102,7 @@ const Notificacao = {
      * @param {string} titulo - O título da mensagem (ex: 'Login bem-sucedido!').
      * @param {string} texto - O texto de apoio (ex: 'Você será redirecionado...').
      * @param {number} [timer=2000] - Tempo em milissegundos para a notificação ficar visível.
+     * Usa SweetAlert2 para mostrar um modal de sucesso temporizado.
      */
     sucessoComTimer(titulo, texto, timer = 2000) {
         return Swal.fire({
@@ -119,6 +127,7 @@ const Notificacao = {
      * Abre um modal para o usuário digitar uma senha.
      * @param {string} titulo - O título do modal.
      * @returns {Promise<string|null>} - Retorna a senha digitada ou `null` se o usuário cancelar.
+     * Usa SweetAlert2 para mostrar um modal de input de senha.
      */
     async pedirSenha(titulo) {
         const { value: senha } = await Swal.fire({
@@ -150,6 +159,7 @@ const Notificacao = {
      * @param {string} html - O conteúdo HTML do alerta.
      * @param {string} textoParaConfirmar - O texto que o usuário deve digitar.
      * @returns {Promise<boolean>} - Retorna `true` se confirmado, `false` se cancelado.
+     * Usa SweetAlert2 para mostrar um modal de confirmação de ação de risco.
      */
     async confirmarAcaoDeRisco(titulo, html, textoParaConfirmar) {
         const { value: confirmado } = await Swal.fire({

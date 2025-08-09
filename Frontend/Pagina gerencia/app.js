@@ -1,3 +1,4 @@
+
 /**
  * ==================================================================
  * SCRIPT PRINCIPAL DA PÁGINA DE GERENCIAMENTO (Gerencia.html)
@@ -7,15 +8,20 @@
  *
  * Ele depende do objeto `Notificacao` que é fornecido pelo arquivo
  * `notificacoes.js`, que deve ser carregado antes deste script.
+ *
+ * Controla autenticação, renderização, edição, drag-and-drop, integração com WebSocket e notificações.
  */
 
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // --- Constantes Globais ---
+    // Define URLs base para API e WebSocket
     const API_URL = '/api';
     const WS_URL = `ws://${window.location.host}`;
 
     
     // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const listaCategorias = document.getElementById('lista-categorias');
     const listaProdutos = document.getElementById('lista-produtos');
     const nomeCategoriaSelecionada = document.getElementById('nome-categoria-selecionada');
@@ -51,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownUserRole = document.getElementById('dropdown-user-role');
 
     // --- Verificação de Autenticação e Permissão ---
+    // Verifica se o usuário está autenticado, caso contrário redireciona para o login
     const token = localStorage.getItem('authToken');
     const usuarioString = localStorage.getItem('usuario');
 
@@ -90,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Função para realizar logout do sistema
     function fazerLogout() {
         // 1. Limpa os dados da sessão de gerência do armazenamento local.
         localStorage.removeItem('authToken');
@@ -104,10 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1500); // 1500 milissegundos = 1.5 segundos
     }
     // --- Variáveis de Estado ---
+    // Variáveis para armazenar o estado da categoria selecionada e item arrastado
     let estado = { categoriaSelecionada: null };
     let itemArrastado = null;
 
     // --- FUNÇÃO DE CHAMADA À API (apiCall) ---
+    // Função utilitária para chamadas à API autenticadas
     async function apiCall(endpoint, method = 'GET', body = null) {
         const token = localStorage.getItem('authToken');
         if (!token) {
@@ -147,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Funções de Conversão ---
+    // Converte arquivo para Base64 para upload de imagens
     function fileToBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -157,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Funções de Renderização ---
+    // Carrega e renderiza categorias e produtos na interface
     async function carregarCategorias() {
         try {
             const categorias = await apiCall('/categorias');
@@ -252,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Lógica do Modal de Edição ---
+    // Abre e fecha o modal de edição de categorias e produtos
     function abrirModalDeEdicao(tipo, itemElement) {
         const id = itemElement.dataset.id;
         editItemId.value = id;
@@ -356,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (e) => { if (e.target === editModal) fecharModal(); });
 
     // --- Event Listeners Principais ---
+    // Listeners para adicionar categoria, produto, alternar happy hour, etc.
     checkIsHappyHour.addEventListener('change', () => {
         happyHourFields.classList.toggle('hidden', !checkIsHappyHour.checked);
     });
@@ -383,6 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Lida com cliques em itens das listas de categorias e produtos (editar, excluir, selecionar, alternar status)
     async function handleListClick(event, listType) {
         const li = event.target.closest('li');
         if (!li) return;
@@ -474,6 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Lógica de Drag and Drop ---
+    // Permite reordenar categorias e produtos via arrastar e soltar (drag and drop)
     function obterElementoAposArrastar(container, y) {
         const elementosArrastaveis = [...container.querySelectorAll('li:not(.dragging)')];
         return elementosArrastaveis.reduce((maisProximo, filho) => {
@@ -552,6 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Lógica do WebSocket ---
+    // Conecta ao WebSocket para receber atualizações do cardápio em tempo real
     function conectarWebSocketGerencia() {
         const ws = new WebSocket(WS_URL);
         ws.onopen = () => console.log('Gerenciador conectado ao WebSocket!');
@@ -573,6 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
      // ==================================================================
     // --- NOVA SEÇÃO: CONEXÃO WEBSOCKET PARA NOTIFICAÇÕES EM TEMPO REAL ---
     // ==================================================================
+    // Conecta ao WebSocket para receber notificações de chamados em tempo real
     function conectarWebSocket() {
         // Constrói a URL do WebSocket de forma segura (ws:// ou wss://)
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -619,7 +637,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- INICIALIZAÇÃO ---
-   conectarWebSocket();
+    // Inicializa WebSocket, carrega categorias e conecta WebSocket do gerenciador
+    conectarWebSocket();
     carregarCategorias();
     conectarWebSocketGerencia();
 });

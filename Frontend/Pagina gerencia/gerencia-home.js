@@ -1,12 +1,16 @@
+
 /**
  * ==================================================================
  * SCRIPT DA PÁGINA INICIAL DA GERÊNCIA (Gerencia-Home.html)
  * VERSÃO FINAL COM LÓGICA DE PERMISSÕES E CONTADORES
  * ==================================================================
+ * Controla a exibição dos cards do dashboard, permissões, contadores e notificações em tempo real.
  */
 
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const profileMenuBtn = document.getElementById('profile-menu-btn');
     const profileDropdown = document.getElementById('profile-dropdown');
     const logoutBtn = document.getElementById('logout-btn');
@@ -16,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pedidosBadge = document.getElementById('pedidos-count-badge');
 
     // --- Função Principal de Inicialização ---
+    // Função principal que inicializa a página, verifica autenticação, configura dashboard e conecta WebSocket
     async function inicializarPagina() {
         const token = localStorage.getItem('authToken');
         const usuarioString = localStorage.getItem('usuario');
@@ -41,16 +46,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Funções de Lógica ---
 
+    // Função para realizar logout do sistema
     function fazerLogout() {
         localStorage.clear();
         window.location.href = '/login-gerencia';
     }
 
+    // Preenche o menu de perfil com os dados do usuário logado
     function preencherPerfil(usuario) {
         if (dropdownUserName) dropdownUserName.textContent = usuario.nome;
         if (dropdownUserRole) dropdownUserRole.textContent = usuario.nivel_acesso;
     }
 
+    // Configura a exibição dos cards do dashboard de acordo com o nível de acesso do usuário
     async function configurarDashboard(usuario) {
         const nivelAcesso = usuario.nivel_acesso;
 
@@ -83,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // /Frontend/Pagina gerencia/gerencia-home.js
 
+// Conecta ao WebSocket para receber notificações em tempo real e atualizar contadores
 function conectarWebSocket(usuario) {
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${wsProtocol}//${window.location.host}`;
@@ -126,6 +135,7 @@ function conectarWebSocket(usuario) {
 }
 
 
+    // Atualiza o contador de chamados ou pedidos pendentes no dashboard
     async function atualizarContador(tipo, token) {
         const badge = tipo === 'chamados' ? chamadosBadge : pedidosBadge;
         const url = tipo === 'chamados' ? '/api/chamados/pendentes/count' : '/api/pedidos/pendentes/count';
@@ -145,6 +155,7 @@ function conectarWebSocket(usuario) {
         }
     }
 
+    // Atualiza ambos os contadores de chamados e pedidos, se os cards estiverem visíveis
     function atualizarContadores(token) {
         // Verifica se o card de chamados está visível antes de buscar o contador
         const cardChamados = document.querySelector('.card-chamados');
@@ -160,6 +171,7 @@ function conectarWebSocket(usuario) {
     }
 
     // --- Event Listeners ---
+    // Adiciona listeners para menu de perfil, logout e inicialização da página
     profileMenuBtn.addEventListener('click', () => profileDropdown.classList.toggle('hidden'));
     window.addEventListener('click', (e) => {
         if (!profileMenuBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
@@ -176,5 +188,6 @@ function conectarWebSocket(usuario) {
     
 
     // --- Ponto de Entrada ---
+    // Inicializa a página ao carregar
     inicializarPagina();
 });

@@ -1,13 +1,17 @@
+
 /**
  * ==================================================================
  * SCRIPT DA PÁGINA DE CONFIGURAÇÕES (configuracoes.js) - VERSÃO FINAL
  * Com a exibição correta de "Mesas Fechadas" no relatório de atividade.
  * ==================================================================
+ * Controla as configurações do sistema, permissões, relatórios e personalização da interface.
  */ 
 
 
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM ---
+    // Seleciona todos os elementos necessários da página para manipulação posterior
     const profileMenuBtn = document.getElementById('profile-menu-btn');
     const profileDropdown = document.getElementById('profile-dropdown');
     const logoutBtn = document.getElementById('logout-btn');
@@ -24,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     // --- Autenticação ---
+    // Verifica se o usuário está autenticado e tem permissão de acesso
     const token = localStorage.getItem('authToken');
     const usuario = JSON.parse(localStorage.getItem('usuario'));
 
@@ -33,11 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Funções ---
+    // Função para realizar logout do sistema
     function fazerLogout() {
         localStorage.clear();
         window.location.href = '/login-gerencia';
     }
 
+    // Salva as configurações alteradas no backend
     async function salvarConfiguracoes(configs) {
         try {
             const response = await fetch('/api/configuracoes', {
@@ -53,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Carrega as configurações iniciais do backend ao abrir a página
     async function carregarConfiguracoesIniciais() {
         try {
             const chaves = 'fonte_cliente,permissoes_home';
@@ -68,12 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Seção de Personalização ---
+    // Listener para salvar a fonte selecionada pelo cliente
     salvarFonteBtn.addEventListener('click', () => {
         const novaFonte = fonteClienteSelect.value;
         salvarConfiguracoes({ 'fonte_cliente': novaFonte });
     });
 
     // --- Seção de Relatórios ---
+    // Carrega a lista de usuários para seleção no relatório de atividades
     async function carregarUsuariosParaRelatorio() {
         try {
             const response = await fetch('/api/configuracoes/usuarios-para-relatorio', { headers: { 'Authorization': `Bearer ${token}` } });
@@ -92,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Gera o relatório de atividades do usuário selecionado
     async function gerarRelatorio() {
     const usuarioId = relatorioUsuarioSelect.value;
     const periodo = relatorioPeriodoSelect.value;
@@ -157,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (deleteButton) deleteButton.remove();
     });
 
+    // Deleta um usuário do sistema após confirmação
     async function deletarUsuario(id, nome) {
     const confirmado = await Notificacao.confirmar('Deletar Funcionário', `Tem certeza que deseja deletar permanentemente o funcionário '${nome}'?`);
     if (confirmado) {
@@ -177,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Seção de Permissões ---
+    // Renderiza os checkboxes de permissões para os módulos do sistema
     function renderizarCheckboxesPermissao(permissoesAtivas = []) {
         const modulos = [
             { id: 'card-cardapio', label: 'Gerenciar Cardápio' },
@@ -194,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Listener para salvar as permissões selecionadas ao enviar o formulário
     permissoesForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const checkboxes = document.querySelectorAll('input[name="permissoes"]:checked');
@@ -203,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Inicialização e Menu de Perfil ---
+    // Inicializa a página, carrega configurações e configura o menu de perfil
     if (dropdownUserName) dropdownUserName.textContent = usuario.nome;
     if (dropdownUserRole) dropdownUserRole.textContent = usuario.nivel_acesso;
     profileMenuBtn.addEventListener('click', () => profileDropdown.classList.toggle('hidden'));

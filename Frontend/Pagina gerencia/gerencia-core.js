@@ -1,5 +1,8 @@
-// /Frontend/Pagina gerencia/gerencia-core.js (Versão "Maestro" Final)
 
+// /Frontend/Pagina gerencia/gerencia-core.js (Versão "Maestro" Final)
+// Script centralizador para WebSocket e roteamento de eventos entre páginas da gerência.
+
+// Aguarda o carregamento completo do DOM para iniciar o script
 document.addEventListener('DOMContentLoaded', () => {
     // Previne que o script rode mais de uma vez
     if (window.gerenciaWsConectado) return;
@@ -13,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Decodifica o token JWT para extrair informações do usuário
     function getUserInfoFromToken(jwt) {
         try {
             const payload = JSON.parse(atob(jwt.split('.')[1]));
@@ -26,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Função principal para conectar ao WebSocket e rotear mensagens recebidas
     function connect() {
         const pageName = window.location.pathname.split('/').pop().split('.')[0] || 'desconhecida';
         const wsUrl = `ws://${window.location.host}?clientType=${userInfo.cargo}&page=${pageName}&userId=${userInfo.id}`;
@@ -35,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ws.onopen = () => console.log('%c[Gerencia Core] WebSocket Conectado.', 'color: green;');
 
-        ws.onmessage = (event) => {
+    // Roteador de mensagens: executa ações globais e chama funções específicas da página
+    ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             
             // ==================================================================
@@ -85,13 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        ws.onclose = () => {
+    // Reconecta automaticamente em caso de desconexão
+    ws.onclose = () => {
             window.gerenciaWsConectado = false;
             setTimeout(connect, 5000);
         };
-        ws.onerror = (error) => console.error('[Gerencia Core] Erro no WebSocket:', error);
+    // Loga erros do WebSocket
+    ws.onerror = (error) => console.error('[Gerencia Core] Erro no WebSocket:', error);
     }
 
-    // Inicia a conexão
+    // Inicia a conexão WebSocket ao carregar a página
     connect();
 });
