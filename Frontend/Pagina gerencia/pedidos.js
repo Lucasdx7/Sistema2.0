@@ -23,69 +23,94 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Renderiza um único card de pedido/sessão na tela.
-     * @param {object} sessao - O objeto da sessão ativa.
-     * Cria o HTML do card de cada pedido/sessão e adiciona ao container.
-     */
-    function renderizarCardPedido(sessao) {
-        const totalFormatado = sessao.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        
-        // Determina o status geral do card
-        let statusGeral = 'aguardando';
-        let statusTexto = 'Aguardando Pedido';
-        if (sessao.itens && sessao.itens.length > 0) {
-            const todosEntregues = sessao.itens.every(item => item.status === 'entregue');
-            if (todosEntregues) {
-                statusGeral = 'todos_entregues';
-                statusTexto = 'Todos os Itens Entregues';
-            } else {
-                statusGeral = 'pedido_feito';
-                statusTexto = 'Pedido Feito';
-            }
+ * Renderiza um único card de pedido/sessão na tela.
+ * @param {object} sessao - O objeto da sessão ativa.
+ * Cria o HTML do card de cada pedido/sessão e adiciona ao container.
+ */
+// Dentro do seu arquivo pedidos.js
+
+function renderizarCardPedido(sessao) {
+    const totalFormatado = sessao.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    
+    // --- A CORREÇÃO DEFINITIVA ESTÁ AQUI ---
+    // Se sessao.itens vier como uma string do servidor, converta para um array.
+    if (typeof sessao.itens === 'string') {
+        try {
+            sessao.itens = JSON.parse(sessao.itens);
+        } catch (e) {
+            console.error("Erro ao fazer parse dos itens da sessão:", e);
+            sessao.itens = []; // Define como array vazio em caso de erro no parse
         }
-
-        const card = document.createElement('div');
-        card.className = 'pedido-card';
-        card.id = `sessao-${sessao.sessao_id}`;
-        card.dataset.status = statusGeral;
-
-        card.innerHTML = `
-            <div class="card-header">
-                <div>
-                    <h3>${sessao.nome_mesa}</h3>
-                    <div class="cliente-nome"><i class="fas fa-user"></i> ${sessao.nome_cliente}</div>
-                </div>
-                <span class="status-tag ${statusGeral}">${statusTexto}</span>
-            </div>
-            <div class="card-body">
-                <ul class="lista-itens">
-                    ${sessao.itens.length > 0 ? sessao.itens.map(item => `
-                        <li>
-                            <div class="item-info">
-                                <span class="item-nome">${item.nome_produto}</span>
-                                <span class="item-quantidade">x${item.quantidade}</span>
-                            </div>
-                            <div class="item-categoria">${item.categoria}</div>
-                            ${item.observacao ? `<div class="item-observacao">${item.observacao}</div>` : ''}
-                            <div class="item-actions">
-                                <button 
-                                    class="btn-entregar" 
-                                    data-item-id="${item.pedido_item_id}" 
-                                    ${item.status === 'entregue' ? 'disabled' : ''}
-                                >
-                                    ${item.status === 'entregue' ? '<i class="fas fa-check-circle"></i> Entregue' : 'Confirmar Entrega'}
-                                </button>
-                            </div>
-                        </li>
-                    `).join('') : '<li>Nenhum item pedido ainda.</li>'}
-                </ul>
-            </div>
-            <div class="card-footer">
-                <span>Total: ${totalFormatado}</span>
-            </div>
-        `;
-        pedidosContainer.appendChild(card);
     }
+    // A partir deste ponto, temos 100% de certeza que sessao.itens é um array.
+    // -----------------------------------------
+
+    // O resto do seu código agora funcionará perfeitamente em AMBOS os ambientes.
+    let statusGeral = 'aguardando';
+    let statusTexto = 'Aguardando Pedido';
+
+    if (Array.isArray(sessao.itens) && sessao.itens.length > 0) {
+        const todosEntregues = sessao.itens.every(item => item.status === 'entregue');
+        if (todosEntregues) {
+            statusGeral = 'todos_entregues';
+            statusTexto = 'Todos os Itens Entregues';
+        } else {
+            statusGeral = 'pedido_feito';
+            statusTexto = 'Pedido Feito';
+        }
+    }
+
+    const card = document.createElement('div');
+    // ... (o resto da sua função continua igual) ...
+
+    card.className = 'pedido-card';
+    card.id = `sessao-${sessao.sessao_id}`;
+    card.dataset.status = statusGeral;
+
+    // --- MELHORIA ADICIONAL ---
+    // Garante que o map só será chamado se 'sessao.itens' for um array.
+    const itensHtml = (Array.isArray(sessao.itens) && sessao.itens.length > 0) 
+        ? sessao.itens.map(item => `
+            <li>
+                <div class="item-info">
+                    <span class="item-nome">${item.nome_produto}</span>
+                    <span class="item-quantidade">x${item.quantidade}</span>
+                </div>
+                <div class="item-categoria">${item.categoria}</div>
+                ${item.observacao ? `<div class="item-observacao">${item.observacao}</div>` : ''}
+                <div class="item-actions">
+                    <button 
+                        class="btn-entregar" 
+                        data-item-id="${item.pedido_item_id}" 
+                        ${item.status === 'entregue' ? 'disabled' : ''}
+                    >
+                        ${item.status === 'entregue' ? '<i class="fas fa-check-circle"></i> Entregue' : 'Confirmar Entrega'}
+                    </button>
+                </div>
+            </li>
+        `).join('') 
+        : '<li>Nenhum item pedido ainda.</li>';
+
+    card.innerHTML = `
+        <div class="card-header">
+            <div>
+                <h3>${sessao.nome_mesa}</h3>
+                <div class="cliente-nome"><i class="fas fa-user"></i> ${sessao.nome_cliente}</div>
+            </div>
+            <span class="status-tag ${statusGeral}">${statusTexto}</span>
+        </div>
+        <div class="card-body">
+            <ul class="lista-itens">
+                ${itensHtml}
+            </ul>
+        </div>
+        <div class="card-footer">
+            <span>Total: ${totalFormatado}</span>
+        </div>
+    `;
+    pedidosContainer.appendChild(card);
+}
+
 
     /**
      * Busca os pedidos/sessões ativos da API e os renderiza na tela.

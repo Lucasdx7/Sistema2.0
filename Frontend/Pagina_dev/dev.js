@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===================================================================
 
 // A função carregarUsuarios() está correta como você postou.
+// SEÇÃO 4: LÓGICA DE GERENCIAMENTO DE USUÁRIOS
+// /Frontend/Pagina_dev/dev.js
+
 async function carregarUsuarios() {
     try {
         const response = await fetch(`${API_BASE_URL}/usuarios`, { headers });
@@ -58,14 +61,19 @@ async function carregarUsuarios() {
         userTableBody.innerHTML = '';
         usuarios.forEach(user => {
             const row = document.createElement('tr');
+            
+            // ****** MUDANÇA 2: Garantir que a ordem dos <td> bate com a dos <th> ******
+            // Ordem correta: ID, Usuário, Nome, Email, Nível, Ação
             row.innerHTML = `
                 <td>${user.id}</td>
+                <td>${user.usuario}</td>
                 <td>${user.nome}</td>
                 <td>${user.email}</td>
                 <td>${user.nivel_acesso}</td>
                 <td class="actions-cell">
                     <button class="action-btn edit-user-btn" 
                             data-user-id="${user.id}" 
+                            data-user-usuario="${user.usuario}"  
                             data-user-nome="${user.nome}" 
                             data-user-email="${user.email}" 
                             data-user-nivel="${user.nivel_acesso}"
@@ -74,7 +82,7 @@ async function carregarUsuarios() {
                     </button>
                     <button class="action-btn change-password-btn" 
                             data-user-id="${user.id}" 
-                            data-user-name="${user.nome}"
+                            data-user-name="${user.usuario}"
                             title="Alterar Senha">
                         <i class="fas fa-key"></i> Senha
                     </button>
@@ -87,92 +95,63 @@ async function carregarUsuarios() {
     }
 }
 
-// ****** AQUI ESTÁ A CORREÇÃO PRINCIPAL ******
-// O event listener foi reestruturado para tratar cada botão de forma independente.
+
+
 userTableBody.addEventListener('click', async (event) => {
-    const target = event.target; // O elemento exato que foi clicado
-
-    // --- Lógica para Editar Usuário ---
+    const target = event.target;
     const editUserBtn = target.closest('.edit-user-btn');
-if (editUserBtn) {
-    // O dataset agora também inclui o ID original
-    const { userId, userNome, userEmail, userNivel } = editUserBtn.dataset;
 
-    const { value: formValues, isConfirmed } = await Swal.fire({
-        title: `Editando Usuário: ${userNome}`,
-        // ****** MUDANÇA: Adicionado campo de input para o ID ******
-        html: `
-            <p class="swal-text-warning"><strong>Atenção:</strong> Alterar o ID é uma operação de risco.</p>
-            <input id="swal-input-id" class="swal2-input" placeholder="ID do Usuário" value="${userId}">
-            <input id="swal-input-nome" class="swal2-input" placeholder="Nome" value="${userNome}">
-            <input id="swal-input-email" class="swal2-input" placeholder="Email" value="${userEmail}">
-            <select id="swal-input-nivel" class="swal2-input">
-                <option value="Pedidos" ${userNivel === 'Pedidos' ? 'selected' : ''}>Pedidos</option>
-                <option value="Geral" ${userNivel === 'Geral' ? 'selected' : ''}>Geral</option>
-                <option value="Dono" ${userNivel === 'Dono' ? 'selected' : ''}>Dono</option>
-            </select>
-        `,
-        focusConfirm: false,
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Salvar Alterações',
-        confirmButtonColor: '#d33', // Botão vermelho para indicar perigo
-        preConfirm: () => {
-            // ****** MUDANÇA: Coleta o novo ID do formulário ******
-            const novoId = document.getElementById('swal-input-id').value;
-            // Validação simples para garantir que o ID não está vazio
-            if (!novoId.trim()) {
-                Swal.showValidationMessage('O campo ID é obrigatório e não pode ser vazio.');
-                return false;
+    if (editUserBtn) {
+        // ****** MUDANÇA 2: Capturar o 'userUsuario' do dataset ******
+        const { userId, userUsuario, userNome, userEmail, userNivel } = editUserBtn.dataset;
+
+        const { value: formValues, isConfirmed } = await Swal.fire({
+            title: `Editando Usuário: ${userUsuario}`,
+            // ****** MUDANÇA 3: Adicionar input para 'usuario' e renomear 'nome' para 'Nome Completo' ******
+            html: `
+                <input id="swal-input-usuario" class="swal2-input" placeholder="Nome de Usuário" value="${userUsuario}">
+                <input id="swal-input-nome" class="swal2-input" placeholder="Nome Completo" value="${userNome}">
+                <input id="swal-input-email" class="swal2-input" placeholder="Email" value="${userEmail}">
+                <select id="swal-input-nivel" class="swal2-input">
+                    <option value="Pedidos" ${userNivel === 'Pedidos' ? 'selected' : ''}>Pedidos</option>
+                    <option value="Geral" ${userNivel === 'Geral' ? 'selected' : ''}>Geral</option>
+                    <option value="Dono" ${userNivel === 'Dono' ? 'selected' : ''}>Dono</option>
+                </select>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Salvar Alterações',
+            preConfirm: () => {
+                // ****** MUDANÇA 4: Coletar o valor de 'usuario' ******
+                return {
+                    usuario: document.getElementById('swal-input-usuario').value,
+                    nome: document.getElementById('swal-input-nome').value,
+                    email: document.getElementById('swal-input-email').value,
+                    nivel_acesso: document.getElementById('swal-input-nivel').value
+                };
             }
-            return {
-                id: novoId,
-                nome: document.getElementById('swal-input-nome').value,
-                email: document.getElementById('swal-input-email').value,
-                nivel_acesso: document.getElementById('swal-input-nivel').value
-            };
-        }
-    });
+        });
 
-    // Se o usuário confirmou o primeiro modal, mostramos a segunda confirmação
-    if (isConfirmed && formValues) {
-        // ****** MUDANÇA: Segunda confirmação se o ID foi alterado ******
-        if (String(formValues.id) !== String(userId)) {
-            const { isConfirmed: finalConfirmation } = await Swal.fire({
-                title: 'Confirmação Final',
-                html: `Você tem certeza que deseja alterar o ID do usuário de <strong>${userId}</strong> para <strong>${formValues.id}</strong>?  
-Esta ação não pode ser desfeita e pode afetar a integridade dos dados.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sim, alterar o ID!',
-                cancelButtonText: 'Cancelar'
-            });
-
-            // Se a confirmação final for cancelada, não fazemos nada
-            if (!finalConfirmation) {
-                return;
+        if (isConfirmed && formValues) {
+            try {
+                // A URL usa o ID para encontrar o usuário, o corpo contém os dados a serem atualizados
+                const response = await fetch(`${API_BASE_URL}/usuarios/${userId}`, {
+                    method: 'PUT',
+                    headers,
+                    body: JSON.stringify(formValues) // Envia o objeto com 'usuario' e 'nome'
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'Ocorreu um erro.');
+                
+                showSuccess(result.message);
+                carregarUsuarios(); // Recarrega a lista para mostrar os dados atualizados
+            } catch (error) {
+                showError(error.message);
             }
         }
-
-        // Prossegue com a chamada à API
-        try {
-            // A URL ainda usa o ID antigo para encontrar o usuário a ser atualizado
-            const response = await fetch(`${API_BASE_URL}/usuarios/${userId}`, {
-                method: 'PUT',
-                headers,
-                body: JSON.stringify(formValues) // O corpo agora contém o novo ID
-            });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.message || 'Ocorreu um erro.');
-            
-            showSuccess(result.message);
-            carregarUsuarios(); // Recarrega a lista para mostrar os dados atualizados
-        } catch (error) {
-            showError(error.message);
-        }
+        return;
     }
-    return;
-}
 
     // --- Lógica para Alterar Senha ---
     const changePasswordBtn = target.closest('.change-password-btn');

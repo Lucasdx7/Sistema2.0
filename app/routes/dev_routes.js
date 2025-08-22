@@ -53,10 +53,10 @@ router.get('/health-check', async (req, res) => {
 // --- ROTA PARA GERENCIAMENTO DE USUÁRIOS (Existente) ---
 // ==================================================================
 
-// GET /api/dev/usuarios -> Busca todos os usuários (exceto o próprio 'dono')
 router.get('/usuarios', async (req, res) => {
     try {
-        const sql = "SELECT id, nome, email, nivel_acesso FROM usuarios WHERE nivel_acesso != 'dono' ORDER BY nome ASC";
+        // ****** MUDANÇA: Adicionar 'usuario' à query SELECT ******
+        const sql = "SELECT id, usuario, nome, email, nivel_acesso FROM usuarios WHERE nivel_acesso != 'dono' ORDER BY nome ASC";
         const usuarios = await query(sql);
         res.json(usuarios);
     } catch (error) {
@@ -164,61 +164,49 @@ router.post('/force-close-session', async (req, res) => {
 // ==================================================================
 // --- ROTA PARA ATUALIZAÇÃO COMPLETA DE USUÁRIO ---
 // ==================================================================
-// PUT /api/dev/usuarios/:id -> Atualiza nome, email e nível de acesso de um usuário
-// PUT /api/dev/usuarios/:id -> Atualiza nome, email, nível de acesso e, opcionalmente, o ID.
+// ROTA PARA ATUALIZAÇÃO COMPLETA DE USUÁRIO
 router.put('/usuarios/:id', async (req, res) => {
-    const { id: idAntigo } = req.params; // Renomeia para clareza
-    const { id: idNovo, nome, email, nivel_acesso } = req.body; // Pega o NOVO ID do corpo da requisição
+    const { id } = req.params;
+    // ****** MUDANÇA 1: Receber 'usuario' e 'nome' do corpo da requisição ******
+    const { usuario, nome, email, nivel_acesso } = req.body;
 
-    // Validação básica dos dados recebidos
-    if (!idNovo || !nome || !email || !nivel_acesso) {
-        return res.status(400).json({ message: 'Todos os campos (ID, nome, email, nível de acesso) são obrigatórios.' });
-    }
-
-    // Validação para garantir que o ID não seja vazio ou inválido
-    if (String(idNovo).trim() === '') {
-        return res.status(400).json({ message: 'O novo ID não pode ser vazio.' });
+    // Validação dos dados recebidos
+    if (!usuario || !nome || !email || !nivel_acesso) {
+        return res.status(400).json({ message: 'Todos os campos (usuário, nome, email, nível de acesso) são obrigatórios.' });
     }
 
     try {
         // Busca o usuário antigo para o log
-        const [usuarioAntigo] = await query('SELECT nome FROM usuarios WHERE id = ?', [idAntigo]);
+        const [usuarioAntigo] = await query('SELECT usuario FROM usuarios WHERE id = ?', [id]);
         if (!usuarioAntigo) {
-            return res.status(404).json({ message: 'Usuário com o ID original não encontrado.' });
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
 
-        // ****** LÓGICA PRINCIPAL DA ATUALIZAÇÃO ******
-        // Monta a query de atualização no banco de dados
-        const sql = 'UPDATE usuarios SET id = ?, nome = ?, email = ?, nivel_acesso = ? WHERE id = ?';
-        await query(sql, [idNovo, nome, email, nivel_acesso, idAntigo]);
+        // ****** MUDANÇA 2: Adicionar o campo 'usuario' na query de UPDATE ******
+        const sql = 'UPDATE usuarios SET usuario = ?, nome = ?, email = ?, nivel_acesso = ? WHERE id = ?';
+        await query(sql, [usuario, nome, email, nivel_acesso, id]);
 
         // Registra a ação no log para auditoria
-        const logMessage = `Atualizou o usuário '${usuarioAntigo.nome}' (ID antigo: ${idAntigo}). Novos dados: ID=${idNovo}, Nome=${nome}, Email=${email}, Nível=${nivel_acesso}.`;
+        const logMessage = `Atualizou o usuário '${usuarioAntigo.usuario}' (ID: ${id}). Novos dados: Usuário=${usuario}, Nome=${nome}, Email=${email}, Nível=${nivel_acesso}.`;
         await registrarLog(req.usuario.id, req.usuario.nome, 'ATUALIZOU_USUARIO_DEV', logMessage);
 
-        res.json({ message: `Usuário '${nome}' atualizado com sucesso! O ID foi alterado de ${idAntigo} para ${idNovo}.` });
+        res.json({ message: `Usuário '${usuario}' atualizado com sucesso!` });
 
     } catch (error) {
-        console.error(`[DEV] Erro ao atualizar usuário ${idAntigo}:`, error);
+        console.error(`[DEV] Erro ao atualizar usuário ${id}:`, error);
         
-        // Trata erro de chave primária duplicada (tentativa de usar um ID que já existe)
         if (error.code === 'ER_DUP_ENTRY') {
-            // Verifica se o erro é de chave primária (ID) ou de email único
-            if (error.message.includes("for key 'PRIMARY'")) {
-                 return res.status(409).json({ message: `O ID '${idNovo}' já está em uso por outro usuário.` });
+            // Mensagens de erro mais específicas
+            if (error.message.includes("for key 'usuario'")) { // Assumindo que a constraint se chama 'usuario'
+                 return res.status(409).json({ message: `O nome de usuário '${usuario}' já está em uso.` });
             }
-            if (error.message.includes("email_unico")) { // Supondo que sua constraint de email se chame 'email_unico'
-                 return res.status(409).json({ message: `O email '${email}' já está em uso por outro usuário.` });
+            if (error.message.includes("for key 'email_unico'")) {
+                 return res.status(409).json({ message: `O email '${email}' já está em uso.` });
             }
         }
-        // Trata erro de chave estrangeira (se a mudança do ID quebrar um relacionamento)
-        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
-            return res.status(409).json({ message: `Não foi possível alterar o ID de ${idAntigo} para ${idNovo}, pois ele está sendo usado em outros registros (logs, sessões, etc.).` });
-        }
-
+        
         res.status(500).json({ message: 'Erro no servidor ao atualizar o usuário.' });
     }
 });
-
 
 module.exports = router;
